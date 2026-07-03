@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>하이디라오 꿀팁</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="page">
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-inner">
+      <img class="hero-mascot" src="assets/mascot.png" alt="하이디라오 마스코트">
+      <h1 class="hero-title"><img class="hero-badge" src="assets/hi-logo.png" alt="">하이디라오 꿀팁</h1>
+      <p class="hero-subtitle">하이디라오 갈 때마다<br class="mobile-break"> 사진첩 뒤지기 귀찮아서 만든 레시피 모음</p>
+    </div>
+  </header>
+
+  <!-- CATEGORY TABS + SEARCH -->
+  <div class="tabs-bar">
+    <div class="tabs" id="tabs"></div>
+    <div class="search-box">
+      <span class="search-icon" id="searchIcon">🔍</span>
+      <input class="search-input" id="searchInput" type="text" placeholder="레시피 검색(예: 건희소스, 메기살덮밥)">
+    </div>
+  </div>
+
+  <!-- RECIPE GRID -->
+  <main class="main">
+    <p class="count-line">레시피 <span class="count-num" id="countNum">0</span>개</p>
+    <div class="recipe-grid" id="recipeGrid"></div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <img class="footer-watermark" src="assets/footer-watermark.png" alt="">
+    <span class="footer-title">하이디라오 꿀팁</span>
+  </footer>
+
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal" id="recipe-modal-scroll">
+    <div class="modal-header">
+      <span class="modal-close" id="modalClose">&times;</span>
+      <div class="modal-emoji" id="modalEmoji"></div>
+      <h2 class="modal-name" id="modalName"></h2>
+      <span class="modal-cat" id="modalCat"></span>
+    </div>
+    <div class="modal-body">
+      <div id="modalOrderWrap">
+        <h3 class="modal-section-title">📋 주문</h3>
+        <div class="ing-box" id="modalOrder"></div>
+      </div>
+      <div>
+        <h3 class="modal-section-title">🥣 소스바</h3>
+        <div class="ing-box" id="modalIngs"></div>
+      </div>
+      <div id="modalStepsWrap">
+        <h3 class="modal-section-title">👩‍🍳 만드는 법</h3>
+        <div class="steps-list" id="modalSteps"></div>
+      </div>
+      <div id="modalTipWrap">
+        <h3 class="modal-section-title">💡 나만의 팁</h3>
+        <div class="tip-box" id="modalTip"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
