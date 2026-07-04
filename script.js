@@ -200,7 +200,6 @@
 
   function setPtrTransform(dist) {
     ptrPage.style.transform = dist ? `translateY(${dist}px)` : '';
-    ptrIndicator.style.setProperty('--ptr-y', `${dist}px`);
     ptrIndicator.classList.toggle('visible', dist >= PTR_SHOW_AT);
   }
 
@@ -244,8 +243,7 @@
     ptrPage.classList.add('ptr-settling');
     if (ptrDistance >= PTR_THRESHOLD) {
       ptrIndicator.classList.add('loading');
-      ptrIndicator.classList.remove('ready');
-      ptrText.textContent = '새로고침 중...';
+      if (navigator.vibrate) navigator.vibrate(30);
       setPtrTransform(56);
       location.href = location.pathname + '?_r=' + Date.now();
     } else {
