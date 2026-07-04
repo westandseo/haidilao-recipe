@@ -566,3 +566,48 @@ body {
   color: #7a3b33;
   font-family: 'Noto Sans KR', sans-serif;
 }
+
+.ptr-indicator {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 6px 18px -6px rgba(180, 30, 20, .35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translate(-50%, -60px);
+  z-index: 999;
+  pointer-events: none;
+}
+
+.ptr-indicator.dragging {
+  transition: none;
+}
+
+.ptr-indicator.settling {
+  transition: transform .25s ease;
+}
+
+.ptr-icon {
+  font-size: 18px;
+  color: #E0301E;
+  transition: transform .2s ease;
+  transform: rotate(0deg);
+}
+
+.ptr-indicator.ready .ptr-icon {
+  transform: rotate(180deg);
+}
+
+.ptr-indicator.loading .ptr-icon {
+  animation: ptr-spin .7s linear infinite;
+}
+
+@keyframes ptr-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}

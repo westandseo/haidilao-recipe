@@ -187,4 +187,57 @@
 
   renderTabs();
   renderGrid();
+
+  const ptrIndicator = document.getElementById('ptrIndicator');
+  const PTR_THRESHOLD = 65;
+  const PTR_MAX = 100;
+  let ptrStartY = 0;
+  let ptrPulling = false;
+  let ptrDistance = 0;
+
+  function setPtrTransform(dist) {
+    ptrIndicator.style.transform = `translate(-50%, ${-60 + dist}px)`;
+  }
+
+  document.addEventListener('touchstart', (e) => {
+    if (window.scrollY > 0 || modalOverlay.classList.contains('open')) {
+      ptrPulling = false;
+      return;
+    }
+    ptrStartY = e.touches[0].clientY;
+    ptrPulling = true;
+    ptrIndicator.classList.remove('settling');
+    ptrIndicator.classList.add('dragging');
+  }, { passive: true });
+
+  document.addEventListener('touchmove', (e) => {
+    if (!ptrPulling) return;
+    const delta = e.touches[0].clientY - ptrStartY;
+    if (delta <= 0) {
+      ptrDistance = 0;
+      setPtrTransform(0);
+      ptrIndicator.classList.remove('ready');
+      return;
+    }
+    e.preventDefault();
+    ptrDistance = Math.min(delta * 0.45, PTR_MAX);
+    setPtrTransform(ptrDistance);
+    ptrIndicator.classList.toggle('ready', ptrDistance >= PTR_THRESHOLD);
+  }, { passive: false });
+
+  document.addEventListener('touchend', () => {
+    if (!ptrPulling) return;
+    ptrPulling = false;
+    ptrIndicator.classList.remove('dragging');
+    ptrIndicator.classList.add('settling');
+    if (ptrDistance >= PTR_THRESHOLD) {
+      ptrIndicator.classList.add('loading');
+      ptrIndicator.classList.remove('ready');
+      setPtrTransform(40);
+      location.href = location.pathname + '?_r=' + Date.now();
+    } else {
+      setPtrTransform(0);
+    }
+    ptrDistance = 0;
+  });
 })();
