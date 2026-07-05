@@ -50,6 +50,7 @@
   let query = '';
 
   const tabsEl = document.getElementById('tabs');
+  const tabsUnderline = document.getElementById('tabsUnderline');
   const gridEl = document.getElementById('recipeGrid');
   const countEl = document.getElementById('countNum');
   const searchInput = document.getElementById('searchInput');
@@ -61,7 +62,7 @@
   const modalClose = document.getElementById('modalClose');
 
   function renderTabs() {
-    tabsEl.innerHTML = '';
+    tabsEl.querySelectorAll('.tab-btn').forEach((btn) => btn.remove());
     CATS.forEach((cat) => {
       const btn = document.createElement('button');
       btn.type = 'button';
@@ -74,6 +75,11 @@
       });
       tabsEl.appendChild(btn);
     });
+    const activeBtn = tabsEl.querySelector('.tab-btn.active');
+    if (activeBtn) {
+      tabsUnderline.style.width = `${activeBtn.offsetWidth}px`;
+      tabsUnderline.style.transform = `translateX(${activeBtn.offsetLeft}px)`;
+    }
   }
 
   function getFiltered() {
@@ -303,4 +309,26 @@
     if (ptrMove(e.touches[0].clientY)) e.preventDefault();
   }, { passive: false });
   document.addEventListener('touchend', ptrEnd);
+
+  // ADD TO HOME SCREEN (iOS Safari only — no install API exists, so we guide manually)
+  function isIosSafariNotInstalled() {
+    const ua = navigator.userAgent;
+    const isIos = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    const isSafari = /Safari/.test(ua) && !/CriOS|FxiOS|EdgiOS|OPiOS/.test(ua);
+    const isStandalone = window.navigator.standalone === true || window.matchMedia('(display-mode: standalone)').matches;
+    return isIos && isSafari && !isStandalone;
+  }
+
+  const a2hsBtn = document.getElementById('a2hsBtn');
+  const a2hsOverlay = document.getElementById('a2hsOverlay');
+  const a2hsClose = document.getElementById('a2hsClose');
+
+  if (a2hsBtn && isIosSafariNotInstalled()) {
+    a2hsBtn.style.display = 'flex';
+    a2hsBtn.addEventListener('click', () => a2hsOverlay.classList.add('open'));
+    a2hsOverlay.addEventListener('click', (e) => {
+      if (e.target === a2hsOverlay) a2hsOverlay.classList.remove('open');
+    });
+    a2hsClose.addEventListener('click', () => a2hsOverlay.classList.remove('open'));
+  }
 })();
