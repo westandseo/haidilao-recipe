@@ -24,7 +24,7 @@
       ings: [['땅콩참깨소스', '0.25', '스푼'], ['스위트칠리소스', '3.5~4', '스푼'], ['튀긴대두', '2~3', '스푼'], ['참기름', '0.5', '스푼'], ['고추기름', '0.5', '스푼'], ['양파', '3', '스푼'], ['다진파', '3', '집게'], ['다진마늘', '1', '스푼']],
       steps: [],
       tip: '튀긴대두, 양파, 다진파, 다진마늘은 많으면 많을수록 맛있음' },
-    { id: 's2', cat: '소스', emoji: '🥣', img: 'assets/recipe card_쑨디2호소스.png', imgBg: '#161D25', tint: 'linear-gradient(160deg,#FBDCD3,#F5B8A8)', name: '쑨디2호소스', source: 'X 쑨디', desc: '트위터리안 \'쑨디\'가 2022년 트위터(현재: X)에 공개한 소스로 정식 명칭은 쑨디2호소스(1호는 없지만 멋있어 보여서 그냥 이름을 2호라고 지었다고 함)이다.',
+    { id: 's2', cat: '소스', emoji: '🥣', img: 'assets/recipe card_쑨디2호소스.png', imgFit: 'cover', tint: 'linear-gradient(160deg,#FBDCD3,#F5B8A8)', name: '쑨디2호소스', source: 'X 쑨디', desc: '트위터리안 \'쑨디\'가 2022년 트위터(현재: X)에 공개한 소스로 정식 명칭은 쑨디2호소스(1호는 없지만 멋있어 보여서 그냥 이름을 2호라고 지었다고 함)이다.',
       ings: [['매운소고기 - 건더기만', '0.5', '스푼'], ['청유훠궈소스 - 건더기만', '0.5', '스푼'], ['땅콩가루', '', '넉넉하게'], ['다진파', '', '넉넉하게'], ['다진마늘', '0.5', '스푼'], ['스위트칠리소스', '0.5', '스푼'], ['굴소스', '0.5', '스푼'], ['땅콩참깨소스', '0.25', '스푼']],
       steps: [],
       tip: '' },
@@ -72,6 +72,8 @@
 
   let activeCat = '전체';
   let query = '';
+  let showFavoritesOnly = false;
+  const favorites = new Set();
 
   const tabsEl = document.getElementById('tabs');
   const tabsUnderline = document.getElementById('tabsUnderline');
@@ -81,9 +83,13 @@
   const searchIcon = document.getElementById('searchIcon');
   const searchClear = document.getElementById('searchClear');
   const searchBox = document.querySelector('.search-box');
+  const favToggleBtn = document.getElementById('favToggleBtn');
+  const favToggleIcon = document.getElementById('favToggleIcon');
+  const homeBtn = document.getElementById('homeBtn');
   const modalOverlay = document.getElementById('modalOverlay');
   const modalScroll = document.getElementById('recipe-modal-scroll');
   const modalClose = document.getElementById('modalClose');
+  const modalFavBtn = document.getElementById('modalFavBtn');
 
   function renderTabs() {
     tabsEl.querySelectorAll('.tab-btn').forEach((btn) => btn.remove());
@@ -108,10 +114,13 @@
 
   function getFiltered() {
     let filtered = RECIPES.filter((r) => activeCat === '전체' || r.cat === activeCat);
+    if (showFavoritesOnly) {
+      filtered = filtered.filter((r) => favorites.has(r.id));
+    }
     const q = query.trim();
     if (q) {
       filtered = filtered.filter((r) =>
-        r.name.includes(q) || r.desc.includes(q) || r.ings.some((i) => i[0].includes(q))
+        r.name.includes(q) || r.ings.some((i) => i[0].includes(q))
       );
     }
     return filtered;
@@ -125,16 +134,24 @@
       const card = document.createElement('div');
       card.className = 'recipe-card';
       card.innerHTML = `
-        <div class="recipe-thumb" style="background:${r.img ? (r.imgBg || '#fff') : r.tint}">${r.img ? `<img class="recipe-thumb-img${r.imgFit === 'cover' ? ' recipe-thumb-img--cover' : ''}" src="${r.img}" alt="${r.name}"${r.imgPosition ? ` style="object-position:${r.imgPosition}"` : ''}><div class="recipe-thumb-overlay">${r.source ? `<div class="recipe-thumb-source">${r.source}</div>` : ''}</div>` : `<span>${r.emoji}</span>`}</div>
+        <div class="recipe-thumb" style="background:${r.img ? (r.imgBg || '#fff') : r.tint}">${r.img ? `<img class="recipe-thumb-img${r.imgFit === 'cover' ? ' recipe-thumb-img--cover' : ''}" src="${r.img}" alt="${r.name}"${r.imgPosition ? ` style="object-position:${r.imgPosition}"` : ''}><div class="recipe-thumb-overlay">${r.source ? `<div class="recipe-thumb-source">${r.source}</div>` : ''}</div>` : `<span>${r.emoji}</span>`}<button class="fav-star${favorites.has(r.id) ? ' active' : ''}" data-id="${r.id}" type="button" aria-label="즐겨찾기"><svg width="18" height="18" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 3.5l2.72 5.66 6.13.85-4.43 4.36 1.03 6.13L12 17.5l-5.45 2.9 1.03-6.13-4.43-4.36 6.13-.85z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg></button></div>
         <div class="recipe-body">
           <div class="recipe-cat-row">
             <span class="recipe-cat-label">${r.cat}</span>
+            <h3 class="recipe-name">${r.name}</h3>
           </div>
-          <h3 class="recipe-name">${r.name}</h3>
-          <p class="recipe-desc">${r.desc}</p>
         </div>
       `;
       card.addEventListener('click', () => openModal(r));
+      card.querySelector('.fav-star').addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (favorites.has(r.id)) {
+          favorites.delete(r.id);
+        } else {
+          favorites.add(r.id);
+        }
+        renderGrid();
+      });
       gridEl.appendChild(card);
     });
   }
@@ -155,11 +172,15 @@
     });
   }
 
+  let currentModalRecipe = null;
+
   function openModal(r) {
+    currentModalRecipe = r;
     document.body.style.overflow = 'hidden';
     document.getElementById('modalName').textContent = r.name;
     document.getElementById('modalCat').textContent = r.cat;
     document.getElementById('modalDesc').textContent = r.desc;
+    modalFavBtn.classList.toggle('active', favorites.has(r.id));
 
     const orderWrap = document.getElementById('modalOrderWrap');
     if (r.order && r.order.length > 0) {
@@ -209,6 +230,17 @@
   modalOverlay.addEventListener('click', closeModal);
   modalScroll.addEventListener('click', (e) => e.stopPropagation());
   modalClose.addEventListener('click', closeModal);
+  modalFavBtn.addEventListener('click', () => {
+    if (!currentModalRecipe) return;
+    const id = currentModalRecipe.id;
+    if (favorites.has(id)) {
+      favorites.delete(id);
+    } else {
+      favorites.add(id);
+    }
+    modalFavBtn.classList.toggle('active', favorites.has(id));
+    renderGrid();
+  });
 
   searchInput.addEventListener('input', (e) => {
     query = e.target.value;
@@ -216,6 +248,22 @@
     renderGrid();
   });
   searchIcon.addEventListener('click', () => searchInput.focus());
+  favToggleBtn.addEventListener('click', () => {
+    showFavoritesOnly = !showFavoritesOnly;
+    favToggleBtn.classList.toggle('active', showFavoritesOnly);
+    renderGrid();
+  });
+  homeBtn.addEventListener('click', () => {
+    activeCat = '전체';
+    query = '';
+    showFavoritesOnly = false;
+    searchInput.value = '';
+    searchBox.classList.remove('has-value');
+    favToggleBtn.classList.remove('active');
+    renderTabs();
+    renderGrid();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
   searchClear.addEventListener('click', () => {
     query = '';
     searchInput.value = '';
@@ -349,10 +397,14 @@
   const a2hsBtn = document.getElementById('a2hsBtn');
   const a2hsOverlay = document.getElementById('a2hsOverlay');
   const a2hsClose = document.getElementById('a2hsClose');
+  const topInstallBtn = document.getElementById('topInstallBtn');
 
   if (a2hsBtn && isIosSafariNotInstalled()) {
     a2hsBtn.style.display = 'flex';
-    a2hsBtn.addEventListener('click', () => a2hsOverlay.classList.add('open'));
+    topInstallBtn.style.display = 'flex';
+    const openA2hsOverlay = () => a2hsOverlay.classList.add('open');
+    a2hsBtn.addEventListener('click', openA2hsOverlay);
+    topInstallBtn.addEventListener('click', openA2hsOverlay);
     a2hsOverlay.addEventListener('click', (e) => {
       if (e.target === a2hsOverlay) a2hsOverlay.classList.remove('open');
     });
@@ -368,18 +420,26 @@
     e.preventDefault();
     deferredInstallPrompt = e;
     androidInstallBtn.style.display = 'flex';
+    topInstallBtn.style.display = 'flex';
   });
 
-  androidInstallBtn.addEventListener('click', async () => {
+  async function promptAndroidInstall() {
     if (!deferredInstallPrompt) return;
     deferredInstallPrompt.prompt();
     await deferredInstallPrompt.userChoice;
     deferredInstallPrompt = null;
     androidInstallBtn.style.display = 'none';
+    topInstallBtn.style.display = 'none';
+  }
+
+  androidInstallBtn.addEventListener('click', promptAndroidInstall);
+  topInstallBtn.addEventListener('click', () => {
+    if (deferredInstallPrompt) promptAndroidInstall();
   });
 
   window.addEventListener('appinstalled', () => {
     androidInstallBtn.style.display = 'none';
+    topInstallBtn.style.display = 'none';
   });
 
   // 카카오톡 등 인앱 브라우저 안내
@@ -406,6 +466,7 @@
 
   // 친구에게 공유
   const shareBtn = document.getElementById('shareBtn');
+  const topShareBtn = document.getElementById('topShareBtn');
   const shareToast = document.getElementById('shareToast');
   let shareToastTimer = null;
 
@@ -416,7 +477,7 @@
     shareToastTimer = setTimeout(() => shareToast.classList.remove('show'), 2000);
   }
 
-  shareBtn.addEventListener('click', async () => {
+  async function shareSite() {
     const shareData = { title: document.title, url: location.origin + location.pathname };
     if (navigator.share) {
       try {
@@ -432,5 +493,8 @@
     } catch (err) {
       showShareToast('링크 복사에 실패했어요');
     }
-  });
+  }
+
+  shareBtn.addEventListener('click', shareSite);
+  topShareBtn.addEventListener('click', shareSite);
 })();
