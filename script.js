@@ -390,13 +390,16 @@
 
   if (isInAppBrowser && !isStandalone && !sessionStorage.getItem(INAPP_DISMISS_KEY)) {
     inappBannerText.textContent = isIos
-      ? '카카오톡 등에서는 홈 화면 추가가 안 돼요. 오른쪽 위 \'⋯\'을 눌러 Safari로 열어주세요'
-      : '카카오톡 등에서는 앱 설치가 안 돼요. 오른쪽 위 \'⋯\'을 눌러 기본 브라우저로 열어주세요';
+      ? '홈 화면에 추가해서 앱처럼 사용하려면 Safari로 열어주세요'
+      : '앱 설치를 하려면 Chrome 또는 기본 브라우저로 열어주세요';
     inappBanner.style.display = 'flex';
-    document.body.style.paddingTop = inappBanner.offsetHeight + 'px';
+    const bannerHeight = inappBanner.offsetHeight;
+    document.body.style.paddingTop = bannerHeight + 'px';
+    ptrIndicator.style.top = (20 + bannerHeight) + 'px';
     inappBannerClose.addEventListener('click', () => {
       inappBanner.style.display = 'none';
       document.body.style.paddingTop = '';
+      ptrIndicator.style.top = '';
       sessionStorage.setItem(INAPP_DISMISS_KEY, '1');
     });
   }

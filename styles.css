@@ -190,8 +190,8 @@ body {
     scrollbar-width: none;
     justify-content: center;
     max-width: 100%;
-    margin-top: 12px;
-    padding: 12px clamp(20px, 5vw, 40px);
+    margin-top: 5px;
+    padding: 5px clamp(20px, 5vw, 40px);
     background: rgba(255, 247, 244, .92);
     backdrop-filter: blur(10px);
     border-bottom: 1px solid #F7DCD3;
@@ -895,6 +895,7 @@ body {
   font-weight: 500;
   line-height: 1.4;
   text-align: center;
+  word-break: keep-all;
 }
 
 .inapp-banner-close {
@@ -995,4 +996,13 @@ body {
   border-radius: 8px;
   color: #E0301E;
   font-size: 15px;
+}
+
+.a2hs-step-icon svg {
+  display: block;
+}
+
+.a2hs-steps li:last-child .a2hs-step-icon {
+  font-size: 20px;
+  font-weight: 700;
 }
