@@ -659,21 +659,21 @@ body {
 
 /* FOOTER */
 .footer {
-  color: #E3B3A6;
   padding: 10px clamp(20px, 5vw, 40px);
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 6px;
-  background-color: #E40111;
+  background-color: #FFF7F4;
   overflow: hidden;
 }
 
 .footer-title {
   font-size: 13px;
   font-weight: 600;
-  color: #FFFFFF;
+  color: #A83226;
   text-align: center;
+  white-space: nowrap;
 }
 
 .footer-break-mobile {
@@ -682,12 +682,11 @@ body {
 
 @media (max-width: 640px) {
   .footer {
-    background-color: #FFF7F4;
     padding-bottom: 160px;
   }
 
   .footer-title {
-    color: #A83226;
+    white-space: normal;
   }
 
   .footer-break-mobile {
