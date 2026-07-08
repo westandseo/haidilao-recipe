@@ -75,7 +75,10 @@
 
   // ── 레시피 데이터 검사: 정식 목록에 없는 재료/단위/주문항목을 콘솔에 경고 ──
   // 새 레시피를 추가하다 오타를 내거나 다른 이름을 쓰면 여기서 바로 걸려요.
+  // ※ 개발 중(로컬)에서만 콘솔에 출력 — 실제 사이트 방문자에겐 아무것도 안 보임.
+  const IS_DEV = ['localhost', '127.0.0.1', ''].includes(location.hostname);
   (function validateRecipes() {
+    if (!IS_DEV) return;
     const knownIng = new Set(SAUCE_BAR);
     const knownOrder = new Set(ORDER_ITEMS);
     const knownUnit = new Set(UNITS);
