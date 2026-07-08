@@ -2,10 +2,11 @@
 
 ## 프로젝트 개요
 하이디라오(훠궈) 소스/레시피를 공유하는 개인 프로젝트 웹사이트. 데스크톱/모바일 대응.
-빌드 도구나 프레임워크 없이 순수 HTML/CSS/JS로 작성됨. 라이브 사이트: https://westandseo.github.io/haidilao-recipe/
+빌드 도구나 프레임워크 없이 순수 HTML/CSS/JS로 작성됨. 라이브 사이트: https://haidilgogo.github.io/
 
 ## 배포
-- GitHub Pages로 배포 (저장소: haidilao-recipe)
+- GitHub Pages로 배포 (조직 haidilgogo / 저장소 haidilgogo.github.io — 루트 주소로 서빙)
+- 이전 주소 westandseo.github.io/haidilao-recipe 에서 이전함 (개인 아이디 노출 방지)
 - 별도 빌드 과정 없음 — 파일 수정 후 push하면 그대로 반영됨
 - 배포 브랜치: main
 
