@@ -647,7 +647,8 @@ body {
   border: none;
   background: none;
   color: #fff;
-  filter: drop-shadow(0 0 1px rgba(0, 0, 0, .9)) drop-shadow(0 1px 3px rgba(0, 0, 0, .55));
+  /* 진한 드롭섀도우로 흰 테두리 없이도 대비 확보(B+) — 어두운 썸네일 위에서도 또렷 */
+  filter: drop-shadow(0 0 2px rgba(0, 0, 0, .95)) drop-shadow(0 1px 4px rgba(0, 0, 0, .7));
   cursor: pointer;
   transition: transform .12s;
   -webkit-tap-highlight-color: transparent;
@@ -661,10 +662,25 @@ body {
   transition: fill .15s;
 }
 
-/* 즐겨찾기됨: 빨간 채움 + 흰 테두리 유지(빨간 톤 썸네일 위에서도 또렷하게). 모달과 같은 빨강 */
+/* 즐겨찾기됨: 빨간 채움만(흰 테두리 없이 깔끔). 모달과 같은 빨강, 대비는 위 드롭섀도우가 담당 */
 .fav-star.active svg path {
   fill: #E0301E;
-  stroke: #fff;
+  stroke: none;
+}
+
+/* 모바일: 손가락 탭 영역을 40px로 넉넉히(보이는 배경 없음), 아이콘 글리프는 19px로 살짝 키움.
+   top/right 2px로 두면 글리프가 지금과 거의 같은 코너 위치에 유지됨 */
+@media (max-width: 640px) {
+  .fav-star {
+    width: 40px;
+    height: 40px;
+    top: 2px;
+    right: 2px;
+  }
+  .fav-star svg {
+    width: 19px;
+    height: 19px;
+  }
 }
 
 .like-btn {
