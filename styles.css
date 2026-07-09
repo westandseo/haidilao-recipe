@@ -1076,7 +1076,7 @@ body {
 .gacha-bowl-shadow {
   position: absolute;
   left: 0;
-  bottom: -13px;
+  bottom: -2px; /* 그릇 그림(캔버스 y82, 아래 여백 14px)의 실제 바닥에 그림자 중심이 오도록 */
   width: 150px;
   height: 30px;
   transition: opacity .3s ease;
