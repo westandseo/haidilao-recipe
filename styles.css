@@ -661,8 +661,10 @@ body {
   transition: fill .15s;
 }
 
+/* 즐겨찾기됨: 빨간 채움 + 흰 테두리 유지(빨간 톤 썸네일 위에서도 또렷하게). 모달과 같은 빨강 */
 .fav-star.active svg path {
-  fill: currentColor;
+  fill: #E0301E;
+  stroke: #fff;
 }
 
 .like-btn {

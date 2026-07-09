@@ -227,6 +227,16 @@
       btn.textContent = cat;
       btn.addEventListener('click', () => {
         activeCat = cat;
+        // 카테고리를 고르면 검색·즐겨찾기 모드에서 빠져나옴(카테고리와 독립이므로 함께 켜두면 혼란)
+        if (showFavoritesOnly) {
+          showFavoritesOnly = false;
+          favToggleBtn.classList.remove('active');
+        }
+        if (query) {
+          query = '';
+          searchInput.value = '';
+          searchBox.classList.remove('has-value');
+        }
         renderTabs();
         renderGrid();
       });
@@ -240,11 +250,13 @@
   }
 
   function getFiltered() {
-    let filtered = RECIPES.filter((r) => activeCat === '전체' || r.cat === activeCat);
+    const q = query.trim();
+    // 검색·즐겨찾기는 카테고리와 독립 — 둘 중 하나라도 켜지면 전체에서 필터함
+    const ignoreCat = showFavoritesOnly || q;
+    let filtered = RECIPES.filter((r) => ignoreCat || activeCat === '전체' || r.cat === activeCat);
     if (showFavoritesOnly) {
       filtered = filtered.filter((r) => favorites.has(r.id));
     }
-    const q = query.trim();
     if (q) {
       filtered = filtered.filter((r) =>
         r.name.includes(q) || r.ings.some((i) => i[0].includes(q))
@@ -414,12 +426,22 @@
   searchInput.addEventListener('input', (e) => {
     query = e.target.value;
     searchBox.classList.toggle('has-value', query.length > 0);
+    // 검색은 카테고리와 독립 — 검색 시작하면 탭을 '전체'로 되돌려 켜진 탭과 결과를 일치시킴
+    if (query.trim() && activeCat !== '전체') {
+      activeCat = '전체';
+      renderTabs();
+    }
     renderGrid();
   });
   searchIcon.addEventListener('click', () => searchInput.focus());
   favToggleBtn.addEventListener('click', () => {
     showFavoritesOnly = !showFavoritesOnly;
     favToggleBtn.classList.toggle('active', showFavoritesOnly);
+    // 즐겨찾기도 카테고리와 독립 — 켤 때 탭을 '전체'로 되돌림
+    if (showFavoritesOnly && activeCat !== '전체') {
+      activeCat = '전체';
+      renderTabs();
+    }
     renderGrid();
   });
   const SORT_LABELS = { popular: '♥️ 인기순', recent: '🕐 최신순', name: '🔤 가나다순' };
