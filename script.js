@@ -529,18 +529,35 @@
     }, 520);
     setTimeout(() => {
       const ver = r.ver ? '<div class="gacha-card-ver">' + r.ver + '</div>' : '';
+      // 카드는 opacity 0(리셋 상태)로 먼저 그려두고, 이미지가 실제로 로드된 뒤에만 공개한다.
+      // → 캐시 여부와 무관하게 카드가 흰 네모로 먼저 뜨는 현상 방지.
       gachaResult.innerHTML =
         '<div class="gacha-card">' +
         '<div class="gacha-card-thumb" style="background:' + (r.imgBg || '#fff') + '"><img src="' + r.img + '" alt="' + r.name + '" style="object-position:' + (r.imgPosition || 'center') + '" draggable="false"></div>' +
         '<div class="gacha-card-body"><span class="gacha-card-cat">소스</span><div class="gacha-card-name">' + r.name + '</div>' + ver + '</div>' +
         '</div>';
-      gachaResult.style.opacity = '1';
-      gachaResult.style.transform = 'scale(1)';
-      gachaCap.style.opacity = '0';
-      gachaConfetti();
-      gachaPull.style.display = 'none';
-      gachaActions.style.display = 'flex';
-      gachaAgain.style.pointerEvents = 'auto';
+      let revealed = false;
+      const reveal = () => {
+        if (revealed) return;
+        revealed = true;
+        gachaResult.style.opacity = '1';
+        gachaResult.style.transform = 'scale(1)';
+        gachaCap.style.opacity = '0';
+        gachaConfetti();
+        gachaPull.style.display = 'none';
+        gachaActions.style.display = 'flex';
+        gachaAgain.style.pointerEvents = 'auto';
+      };
+      const cardImg = gachaResult.querySelector('.gacha-card-thumb img');
+      if (cardImg && cardImg.complete && cardImg.naturalWidth > 0) {
+        reveal();
+      } else if (cardImg) {
+        cardImg.addEventListener('load', reveal);
+        cardImg.addEventListener('error', reveal); // 이미지 실패해도 캡슐에 갇히지 않게
+        setTimeout(reveal, 1500); // 안전장치: 아무리 느려도 1.5초 뒤엔 공개
+      } else {
+        reveal();
+      }
     }, 840);
   }
 
