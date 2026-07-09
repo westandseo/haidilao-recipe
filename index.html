@@ -16,7 +16,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=103">
+<link rel="stylesheet" href="styles.css?v=104">
 <link rel="icon" type="image/png" sizes="192x192" href="assets/icon-192.png?v=2">
 <link rel="icon" type="image/png" sizes="512x512" href="assets/icon-512.png?v=2">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png?v=2">
@@ -205,6 +205,20 @@
     <button class="modal-close gacha-close" id="gachaClose" type="button" aria-label="닫기">&times;</button>
     <div class="gacha-title">오늘의 소스</div>
     <div class="gacha-stage" id="gachaStage">
+      <!-- 받침 매트: 크림색 그릇이 배경에 묻히지 않게 우드톤 매트를 깔아 대비 확보 -->
+      <svg class="gacha-mat" id="gachaMat" viewBox="0 0 190 44" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs>
+          <radialGradient id="gMat" cx="50%" cy="42%" r="62%">
+            <stop offset="0%" stop-color="#C99A63"/>
+            <stop offset="70%" stop-color="#A97C48"/>
+            <stop offset="100%" stop-color="#8F6438"/>
+          </radialGradient>
+        </defs>
+        <ellipse cx="95" cy="22" rx="93" ry="20" fill="url(#gMat)"/>
+        <ellipse cx="95" cy="22" rx="93" ry="20" fill="none" stroke="rgba(255,255,255,.18)" stroke-width="1.5"/>
+        <ellipse cx="95" cy="22" rx="78" ry="16" fill="none" stroke="rgba(90,55,25,.25)" stroke-width="1.2"/>
+        <ellipse cx="95" cy="21" rx="60" ry="12" fill="none" stroke="rgba(90,55,25,.18)" stroke-width="1"/>
+      </svg>
       <div class="gacha-bowl" id="gachaBowl">
         <!-- 소스그릇: 블러/그림자 필터 없이 SVG 그라데이션만 사용(iOS 렌더링 문제 회피) -->
         <svg class="gacha-bowl-shadow" id="gachaBowlShadow" viewBox="0 0 150 30" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -230,6 +244,7 @@
             </linearGradient>
           </defs>
           <ellipse cx="75" cy="30" rx="65" ry="18" fill="url(#gBowlRimTop)"/>
+          <ellipse cx="75" cy="30" rx="61" ry="16.5" fill="none" stroke="#C0392B" stroke-width="1.8"/>
           <ellipse cx="75" cy="31" rx="57" ry="15" fill="url(#gBowlInner)"/>
         </svg>
         <svg class="gacha-sauce" id="gachaSauce" viewBox="0 0 150 96" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -239,10 +254,18 @@
               <stop offset="55%" stop-color="#C23517"/>
               <stop offset="100%" stop-color="#8E2410"/>
             </radialGradient>
+            <radialGradient id="gSauceBeige" cx="44%" cy="34%" r="78%">
+              <stop offset="0%" stop-color="#F2DDAE"/>
+              <stop offset="55%" stop-color="#D8AE6C"/>
+              <stop offset="100%" stop-color="#B07F42"/>
+            </radialGradient>
           </defs>
           <ellipse cx="75" cy="31" rx="50" ry="12" fill="url(#gSauceBody)"/>
+          <ellipse class="sauce-beige" id="gachaSauceBeige" cx="75" cy="31" rx="50" ry="12" fill="url(#gSauceBeige)"/>
           <ellipse cx="75" cy="31" rx="50" ry="12" fill="none" stroke="rgba(96,22,8,.4)" stroke-width="1.2"/>
           <ellipse cx="59" cy="27" rx="15" ry="3.6" fill="rgba(255,255,255,.32)"/>
+          <ellipse cx="87" cy="30.5" rx="8" ry="2.4" fill="rgba(255,190,120,.4)"/>
+          <ellipse cx="93" cy="32" rx="3" ry="1.2" fill="rgba(255,210,150,.45)"/>
           <ellipse cx="88" cy="33" rx="2.1" ry="1.2" fill="#F4E7C8" transform="rotate(24 88 33)"/>
           <ellipse cx="66" cy="34" rx="2.1" ry="1.2" fill="#F0E2BE" transform="rotate(-18 66 34)"/>
           <ellipse cx="79" cy="28.5" rx="1.9" ry="1.1" fill="#F7ECD2" transform="rotate(50 79 28.5)"/>
@@ -278,6 +301,6 @@
   </div>
 </div>
 
-<script src="script.js?v=55"></script>
+<script src="script.js?v=56"></script>
 </body>
 </html>

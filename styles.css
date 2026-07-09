@@ -1052,11 +1052,25 @@ body {
 /* 소스그릇: 블러/그림자 필터 없이 SVG 그라데이션만 사용(iOS 렌더링 문제 회피).
    층 순서: 그림자(0) < 그릇 안쪽(1) < 소스(2) < 떨어지는 재료(3) < 그릇 앞면(4)
    → 재료가 그릇 "안으로" 떨어져 앞면 뒤로 잠기는 것처럼 보임 */
+/* 받침 매트: 그릇과 함께 출렁이지 않게 그릇 밖(스테이지)에 둠 */
+.gacha-mat {
+  position: absolute;
+  left: 50%;
+  top: 132px;
+  width: 190px;
+  height: 44px;
+  margin-left: -95px;
+  transition: opacity .25s;
+  pointer-events: none;
+  z-index: 0;
+}
+
 .gacha-bowl {
   position: relative;
   width: 150px;
   height: 96px;
   transition: opacity .25s;
+  z-index: 1;
 }
 
 .gacha-bowl-shadow {
@@ -1090,6 +1104,9 @@ body {
   transform-origin: 50% 32%;
   transition: opacity .25s, transform .3s cubic-bezier(.3, 1.4, .5, 1);
 }
+
+/* 베이지(땅콩소스) 레이어: 재료가 들어갈수록 옅어져 아래의 빨간 소스가 드러남 */
+.gacha-sauce .sauce-beige { transition: opacity .35s ease; }
 
 .gacha-ings {
   position: absolute;

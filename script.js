@@ -456,9 +456,11 @@
   const gachaModal = document.getElementById('gachaModal');
   const gachaClose = document.getElementById('gachaClose');
   const gachaStage = document.getElementById('gachaStage');
+  const gachaMat = document.getElementById('gachaMat');
   const gachaBowl = document.getElementById('gachaBowl');
   const gachaBowlShadow = document.getElementById('gachaBowlShadow');
   const gachaSauce = document.getElementById('gachaSauce');
+  const gachaSauceBeige = document.getElementById('gachaSauceBeige');
   const gachaIngs = document.getElementById('gachaIngs');
   const gachaResult = document.getElementById('gachaResult');
   const gachaPull = document.getElementById('gachaPull');
@@ -494,16 +496,56 @@
     }
   }
 
+  // 재료 착지 시 튀는 소스 방울 색: 소스가 베이지 → 빨강으로 변해가는 단계를 따라감
+  const GACHA_SPLASH_COLORS = ['#D8AE6C', '#CE8B4F', '#C86636', '#C24E24', '#C23517'];
+
+  function gachaSplash(x, color) {
+    for (let k = 0; k < 2; k++) {
+      const p = document.createElement('span');
+      const sz = 4 + Math.random() * 3;
+      p.style.cssText = 'position:absolute;left:calc(50% + ' + x + 'px);top:26px;width:' + sz + 'px;height:' + sz + 'px;background:' + color + ';border-radius:50%;pointer-events:none;';
+      gachaIngs.appendChild(p);
+      const dx = (k === 0 ? -1 : 1) * (8 + Math.random() * 8);
+      const dy = -(10 + Math.random() * 8);
+      const anim = p.animate([
+        { transform: 'translate(0,0) scale(1)', opacity: .9 },
+        { transform: 'translate(' + dx.toFixed(0) + 'px,' + dy.toFixed(0) + 'px) scale(.6)', opacity: 0 }
+      ], { duration: 320, easing: 'ease-out', fill: 'forwards' });
+      anim.onfinish = () => p.remove();
+    }
+  }
+
+  const GACHA_STAR = '<svg viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg"><path d="M6 0 L7.3 4.7 L12 6 L7.3 7.3 L6 12 L4.7 7.3 L0 6 L4.7 4.7 Z" fill="#FFD98A"/></svg>';
+
+  function gachaSparkle() {
+    [[52, 8], [88, 4], [70, 16]].forEach((pos, k) => {
+      const st = document.createElement('span');
+      st.style.cssText = 'position:absolute;left:' + pos[0] + 'px;top:' + pos[1] + 'px;width:11px;height:11px;pointer-events:none;';
+      st.innerHTML = GACHA_STAR;
+      gachaIngs.appendChild(st);
+      const anim = st.animate([
+        { transform: 'translateY(4px) scale(.4)', opacity: 0 },
+        { transform: 'translateY(-3px) scale(1)', opacity: 1, offset: .45 },
+        { transform: 'translateY(-11px) scale(1.15)', opacity: 0 }
+      ], { duration: 550, delay: k * 80, easing: 'ease-out', fill: 'forwards' });
+      anim.onfinish = () => st.remove();
+    });
+  }
+
   function gachaResetBowl() {
     // 그릇 복구는 전환 없이 즉시 — 다시 뽑기 때 잔상이 새 연출과 겹치지 않게
     gachaIngs.innerHTML = '';
     gachaSauce.style.transition = 'none';
     gachaSauce.style.opacity = '0';
     gachaSauce.style.transform = 'scale(.5)';
+    gachaSauceBeige.style.transition = 'none';
+    gachaSauceBeige.style.opacity = '1'; // 처음엔 땅콩소스(베이지)부터 시작
     void gachaSauce.offsetWidth;
     gachaSauce.style.transition = '';
+    gachaSauceBeige.style.transition = '';
     gachaBowl.classList.remove('bump');
     gachaBowl.style.opacity = '1';
+    gachaMat.style.opacity = '1';
     gachaBowlShadow.style.opacity = '1';
     // 결과 카드는 애니메이션 없이 즉시 제거(다시 뽑기 때 흰 네모 잔상 방지)
     gachaResult.style.transition = 'none';
@@ -533,22 +575,26 @@
     gachaPicked = r;
     const preload = new Image();
     preload.src = r.img;
-    // 재료를 하나씩 그릇에 떨어뜨린다: 착지마다 그릇 출렁 + 소스 차오름 + 재료 잠김
+    // 재료를 하나씩 그릇에 떨어뜨린다: 착지마다 그릇 출렁 + 소스 차오름/색 변화 + 스플래시
     GACHA_DROPS.forEach((d, idx) => {
       setTimeout(() => {
         const s = document.createElement('span');
         s.className = 'gacha-ing';
         s.style.left = 'calc(50% + ' + d.x + 'px)';
         s.innerHTML = d.svg;
+        s.firstChild.style.transform = 'rotate(' + Math.round(Math.random() * 50 - 25) + 'deg)'; // 낙하마다 아이콘 각도 랜덤
         gachaIngs.appendChild(s);
         setTimeout(() => {
           gachaBowl.classList.remove('bump');
           void gachaBowl.offsetWidth;
           gachaBowl.classList.add('bump');
           const step = (idx + 1) / GACHA_DROPS.length;
-          gachaSauce.style.opacity = String(.25 + .75 * step);
+          gachaSauce.style.opacity = String(.35 + .65 * step);
           gachaSauce.style.transform = 'scale(' + (.5 + .5 * step).toFixed(2) + ')';
+          gachaSauceBeige.style.opacity = String(1 - step); // 재료가 들어갈수록 베이지 → 빨강
+          gachaSplash(d.x, GACHA_SPLASH_COLORS[idx]);
           s.classList.add('sink');
+          if (idx === GACHA_DROPS.length - 1) setTimeout(gachaSparkle, 130); // 완성 반짝임
         }, 430); // gachaDrop 애니메이션(.43s) 착지 시점
       }, idx * 170);
     });
@@ -568,6 +614,7 @@
         gachaResult.style.opacity = '1';
         gachaResult.style.transform = 'scale(1)';
         gachaBowl.style.opacity = '0';
+        gachaMat.style.opacity = '0';
         gachaBowlShadow.style.opacity = '0';
         gachaConfetti();
         gachaPull.style.display = 'none';
