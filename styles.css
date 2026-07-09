@@ -1053,7 +1053,10 @@ body {
   position: relative;
   width: 128px;
   height: 128px;
-  filter: drop-shadow(0 7px 12px rgba(170, 70, 40, .24));
+  /* 원형 그림자: filter:drop-shadow는 자식(.gacha-cap-half)의 overflow:hidden 때문에
+     iOS 사파리에서 사각형으로 렌더링됨 → box-shadow+원형 border-radius로 대체 */
+  border-radius: 50%;
+  box-shadow: 0 7px 12px rgba(170, 70, 40, .24);
 }
 
 .gacha-cap.shaking {
