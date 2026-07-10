@@ -878,27 +878,21 @@ body {
 
 .footer-report {
   display: inline-block;
-  margin-top: 2px;
-  padding: 9px 18px;
+  padding: 8px 16px;
   font-size: 12px;
   font-weight: 500;
-  color: #B0574A;
-  text-decoration: none;
+  color: #C08A80;
+  text-decoration: underline;
+  text-decoration-color: #E4C0B8;
+  text-underline-offset: 3px;
   text-align: center;
-  background-color: #FDECE7;
-  border: 1px solid #F2D3CB;
-  border-radius: 999px;
-  transition: background-color .15s ease, color .15s ease;
+  transition: color .15s ease;
   -webkit-tap-highlight-color: transparent;
 }
 
 .footer-report:hover {
-  background-color: #FADFD8;
   color: #A83226;
-}
-
-.footer-report:active {
-  background-color: #F5D2C9;
+  text-decoration-color: #A83226;
 }
 
 .footer-break-mobile {
