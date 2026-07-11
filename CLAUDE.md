@@ -17,7 +17,7 @@ Haidilgogo/
 ├── script.js        # 데이터 + 렌더링 로직 (아래 참고)
 ├── manifest.json    # PWA 매니페스트
 └── assets/
-    ├── cards/       # 레시피 카드 썸네일 (파일명 = 소스명.jpg, 예: 건희소스[단].jpg — 'recipe card_' 접두어 없음)
+    ├── cards/       # 레시피 카드 썸네일 (파일명 = 소스명.jpg, 버전 있으면 소스명_연도.jpg. 예: 건희소스[단]_2021.jpg, 영지소스_2025.jpg — 'recipe card_' 접두어 없음)
     ├── icons/       # 앱 아이콘·og (apple-touch-icon, icon-192, icon-512, logo-mark, og-image)
     └── fonts/       # 웹폰트 woff2
 ```
