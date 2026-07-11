@@ -581,9 +581,20 @@ body {
   }
 }
 
-/* 모바일 탭(누를 때)에도 로즈 테두리 표시 — hover 없는 터치기기용 */
-.recipe-card:active {
-  border-color: var(--card-hover-border);
+/* 모바일 탭(누를 때) 반응 — hover 없는 터치기기용.
+   단, 좋아요·책갈피 버튼을 누를 땐 카드 테두리·썸네일 확대 반응 제외(:active 전파 차단) */
+@media (hover: none) {
+  .recipe-card:active {
+    border-color: var(--card-hover-border);
+  }
+  .recipe-card:has(.fav-star:active),
+  .recipe-card:has(.like-btn:active) {
+    border-color: rgba(43, 18, 13, .06);
+  }
+  .recipe-card:has(.fav-star:active) .recipe-thumb-img,
+  .recipe-card:has(.like-btn:active) .recipe-thumb-img {
+    transform: none;
+  }
 }
 
 .recipe-thumb {
