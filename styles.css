@@ -629,17 +629,38 @@ body {
 }
 
 .recipe-thumb-source {
+  display: flex;
+  align-items: center;
+  gap: 5px;
   padding: 0 12px 10px;
   font-size: 11px;
   font-weight: 400;
   color: #fff;
   font-family: 'Noto Sans KR', sans-serif;
+}
+
+.recipe-thumb-source .src-ic {
+  width: 13px;
+  height: 13px;
+  flex-shrink: 0;
+  display: block;
+  fill: currentColor;
+}
+
+/* 버블(PNG)은 이미지 안에 여백이 있어 SVG보다 작아 보임 → 살짝 키움 */
+.recipe-thumb-source img.src-ic {
+  width: 17px;
+  height: 17px;
+}
+
+.recipe-thumb-source .src-txt {
+  min-width: 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.recipe-thumb span {
+.recipe-thumb > span {
   font-size: 68px;
   line-height: 1;
 }
@@ -810,6 +831,21 @@ body {
 .name-sub {
   font-size: 0.68em;
   font-weight: 700;
+}
+
+/* 연예인 스타 표시 — 제목 첫 글자 왼쪽 위 골드 별 (연예인 이름은 짧아 ellipsis 불필요) */
+.recipe-name.has-star {
+  position: relative;
+  overflow: visible;
+}
+
+.recipe-name .star-accent {
+  position: absolute;
+  left: -9px;
+  top: -8px;
+  width: 15px;
+  height: 15px;
+  z-index: 2;
 }
 
 .recipe-ver {

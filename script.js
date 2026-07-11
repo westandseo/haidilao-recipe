@@ -40,11 +40,11 @@
     .map((x) => x[0]);
 
   const RECIPES = [
-    { id: 's1', date: '2021-12-26', cat: '소스', emoji: '🥣', img: 'assets/cards/건희소스[단]_2021.jpg?v=3', imgFit: 'cover', imgBg: '#A8CCDC', tint: 'linear-gradient(160deg,#FDECD9,#F8D9BE)', name: '건희소스[단]', ver: '2021', source: 'ONEUS 건희', desc: '아이돌 그룹 \'ONEUS\'의 \'건희\'가 버블에 공개한 소스로, 현 시점 대한민국에서 가장 유명한 소스이다.',
+    { id: 's1', date: '2021-12-26', cat: '소스', emoji: '🥣', img: 'assets/cards/건희소스[단]_2021.jpg?v=3', imgFit: 'cover', imgBg: '#A8CCDC', tint: 'linear-gradient(160deg,#FDECD9,#F8D9BE)', name: '건희소스[단]', ver: '2021', source: '버블 건희', star: true, desc: '아이돌 그룹 \'ONEUS\'의 \'건희\'가 버블에 공개한 소스로, 현 시점 대한민국에서 가장 유명한 소스이다.',
       ings: [['땅콩참깨소스', '1', '스푼'], ['스위트칠리소스', '2.5', '스푼'], ['다진마늘', '0.5', '스푼'], ['다진파', '0.5', '스푼'], ['참깨', '1', '티스푼'], ['땅콩가루', '1', '티스푼'], ['마라시즈닝(고춧가루)', '0.5', '티스푼'], ['고추기름', '1', '티스푼'], ['설탕', '0.3', '티스푼'], ['매운소고기소스', '0.5', '티스푼']],
       steps: [],
       tip: '너무 달면 스위트칠리소스는 1스푼으로 줄이기' },
-    { id: 's16', date: '2021-12-26', cat: '소스', emoji: '🥣', img: 'assets/cards/건희소스[짠]_2021.jpg?v=4', imgFit: 'cover', imgBg: '#A8CCDC', tint: 'linear-gradient(160deg,#FDECD9,#F8D9BE)', name: '건희소스[짠]', ver: '2021', source: 'ONEUS 건희', desc: '아이돌 그룹 \'ONEUS\'의 \'건희\'가 버블에 공개한 소스의 짠맛 버전. 단맛 없이 고소하고 짭짤하게 즐기는 스타일이다.',
+    { id: 's16', date: '2021-12-26', cat: '소스', emoji: '🥣', img: 'assets/cards/건희소스[짠]_2021.jpg?v=4', imgFit: 'cover', imgBg: '#A8CCDC', tint: 'linear-gradient(160deg,#FDECD9,#F8D9BE)', name: '건희소스[짠]', ver: '2021', source: '버블 건희', star: true, desc: '아이돌 그룹 \'ONEUS\'의 \'건희\'가 버블에 공개한 소스의 짠맛 버전. 단맛 없이 고소하고 짭짤하게 즐기는 스타일이다.',
       ings: [['소금', '3', '티스푼'], ['참기름', '3', '스푼'], ['고추기름', '0.5', '스푼'], ['다진마늘', '1', '스푼'], ['참깨', '1', '티스푼'], ['마라시즈닝(고춧가루)', '1', '티스푼']],
       steps: [],
       tip: '' },
@@ -52,7 +52,7 @@
       ings: [['땅콩참깨소스', '0.25', '스푼'], ['스위트칠리소스', '3.5~4', '스푼'], ['튀긴대두', '2~3', '스푼'], ['참기름', '0.5', '스푼'], ['고추기름', '0.5', '스푼'], ['다진양파', '3', '스푼'], ['다진파', '3', '스푼'], ['다진마늘', '1', '스푼']],
       steps: [],
       tip: '튀긴대두, 양파, 다진파, 다진마늘은 많으면 많을수록 맛있음' },
-    { id: 's2', date: '2022-01-22', cat: '소스', emoji: '🥣', img: 'assets/cards/쑨디2호소스_2022.jpg?v=3', imgFit: 'cover', tint: 'linear-gradient(160deg,#FBDCD3,#F5B8A8)', name: '쑨디2호소스', ver: '2022', source: 'X @deeplovehalf', desc: '트위터리안 \'쑨디\'가 2022년 트위터(현재: X)에 공개한 소스로 정식 명칭은 쑨디2호소스(1호는 없지만 멋있어 보여서 그냥 이름을 2호라고 지었다고 함)이다.',
+    { id: 's2', date: '2022-01-22', cat: '소스', emoji: '🥣', img: 'assets/cards/쑨디2호소스_2022.jpg?v=3', imgFit: 'cover', tint: 'linear-gradient(160deg,#FBDCD3,#F5B8A8)', name: '쑨디2호소스', ver: '2022', source: '트위터 @deeplovehalf', desc: '트위터리안 \'쑨디\'가 2022년 트위터(현재: X)에 공개한 소스로 정식 명칭은 쑨디2호소스(1호는 없지만 멋있어 보여서 그냥 이름을 2호라고 지었다고 함)이다.',
       ings: [['매운소고기소스[건더기만]', '0.5', '스푼'], ['청유훠궈소스[건더기만]', '0.5', '스푼'], ['땅콩가루', '', '넉넉하게'], ['다진파', '', '넉넉하게'], ['다진마늘', '0.5', '스푼'], ['스위트칠리소스', '0.5', '스푼'], ['굴소스', '0.5', '스푼'], ['땅콩참깨소스', '0.25', '스푼']],
       steps: [],
       tip: '' },
@@ -60,11 +60,11 @@
       ings: [['땅콩참깨소스', '0.5', '스푼'], ['다진파', '', '넉넉하게'], ['스위트칠리소스', '0.5', '스푼'], ['다진마늘', '3', '스푼'], ['굴소스', '1', '스푼'], ['매운소고기소스[건더기만]', '1', '스푼'], ['청유훠궈소스[건더기만]', '2', '스푼'], ['땅콩가루', '2', '스푼'], ['만구향', '1', '스푼']],
       steps: [],
       tip: '' },
-    { id: 's5', date: '2025-04-11', cat: '소스', emoji: '🥣', img: 'assets/cards/영지소스_2025.jpg?v=4', imgFit: 'cover', tint: 'linear-gradient(160deg,#F5E6D3,#E8C9A0)', name: '영지소스', ver: '2025', source: 'YouTube 채널십오야', desc: '유튜브 채널 \'채널십오야\'의 나영석의 보글보글 촬영 중 \'이영지\'가 공개한 소스이다.',
+    { id: 's5', date: '2025-04-11', cat: '소스', emoji: '🥣', img: 'assets/cards/영지소스_2025.jpg?v=4', imgFit: 'cover', tint: 'linear-gradient(160deg,#F5E6D3,#E8C9A0)', name: '영지소스', ver: '2025', source: 'YouTube 채널십오야', star: true, desc: '유튜브 채널 \'채널십오야\'의 나영석의 보글보글 촬영 중 \'이영지\'가 공개한 소스이다.',
       ings: [['땅콩참깨소스', '2', '스푼'], ['스위트칠리소스', '1.5', '스푼'], ['태국고추', '2', '스푼'], ['마라시즈닝(고춧가루)', '1.5', '스푼'], ['다진파', '1.5', '스푼'], ['다진마늘', '1', '스푼'], ['참기름', '2', '바퀴'], ['간장소스', '1', '바퀴'], ['오향우육(다진고기)', '1.5', '스푼'], ['참깨', '', '적당히'], ['설탕', '', '한 꼬집'], ['땅콩가루', '', '한 꼬집']],
       steps: [],
       tip: '' },
-    { id: 's7', date: '2025-04-11', cat: '소스', emoji: '🥣', img: 'assets/cards/마크소스.jpg?v=3', imgFit: 'cover', tint: 'linear-gradient(160deg,#FDEBD0,#F5C99B)', name: '마크소스', source: 'YouTube 채널십오야', desc: '유튜브 채널 \'채널십오야\'의 나영석의 보글보글 촬영 중 \'마크\'가 공개한 소스이다.',
+    { id: 's7', date: '2025-04-11', cat: '소스', emoji: '🥣', img: 'assets/cards/마크소스.jpg?v=3', imgFit: 'cover', tint: 'linear-gradient(160deg,#FDEBD0,#F5C99B)', name: '마크소스', source: 'YouTube 채널십오야', star: true, desc: '유튜브 채널 \'채널십오야\'의 나영석의 보글보글 촬영 중 \'마크\'가 공개한 소스이다.',
       ings: [['땅콩참깨소스', '2', '스푼'], ['다진마늘', '1.5', '스푼'], ['다진양파', '1.5', '스푼'], ['굴소스', '1', '스푼'], ['태국고추', '1', '스푼'], ['간장소스', '2', '스푼'], ['오향우육(다진고기)', '', '적당히'], ['다진파', '', '적당히'], ['땅콩가루', '', '적당히'], ['마라시즈닝(고춧가루)', '', '적당히']],
       steps: [],
       tip: '' },
@@ -322,6 +322,29 @@
     return sorted;
   }
 
+  // 출처 플랫폼 아이콘 (흰색 단색, 어두운 썸네일 위에 표시). 색은 CSS currentColor(흰색) 상속.
+  const SRC_ICONS = {
+    youtube: '<svg class="src-ic" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>',
+    twitter: '<svg class="src-ic" viewBox="0 0 246.15 200.0126"><path d="M221.95 51.29c.15 2.17.15 4.34.15 6.53 0 66.73-50.8 143.69-143.69 143.69v-.04A142.966 142.966 0 0 1 1 178.83a102.726 102.726 0 0 0 12.02.73 101.407 101.407 0 0 0 62.72-21.66 50.564 50.564 0 0 1-47.18-35.07 50.338 50.338 0 0 0 22.8-.87 50.505 50.505 0 0 1-40.51-49.5v-.64a50.18 50.18 0 0 0 22.92 6.32 50.564 50.564 0 0 1-15.63-67.43 143.333 143.333 0 0 0 104.08 52.76 50.548 50.548 0 0 1 86.06-46.06 101.337 101.337 0 0 0 32.07-12.26 50.69 50.69 0 0 1-22.2 27.93 100.435 100.435 0 0 0 29-7.95 102.594 102.594 0 0 1-25.2 26.16Z" transform="translate(-1 -1.497)"/></svg>',
+    x: '<svg class="src-ic" viewBox="0 0 128 115.7001"><path d="M100.808 0h19.627l-42.88 49.01L128 115.7H88.502L57.565 75.253 22.167 115.7H2.527L48.393 63.28 0 0h40.501l27.964 36.97Zm-6.89 103.952h10.877L34.592 11.131H22.92Z"/></svg>',
+    naver: '<svg class="src-ic" viewBox="0 0 924.43 1000"><path d="M344.06 286.98c-70.27 0-135.39 22.03-188.86 59.55V70.18H0v858.3h155.2v-42.62c53.47 37.51 118.59 59.55 188.86 59.55 181.82 0 329.21-147.39 329.21-329.21s-147.4-329.22-329.21-329.22zm-14.78 514.64c-99.13 0-179.49-83.08-179.49-185.56S230.15 430.5 329.28 430.5s179.49 83.08 179.49 185.56-80.36 185.56-179.49 185.56zM862.35 0h62.08v1000h-62.08z"/></svg>',
+    bubble: '<img class="src-ic" src="assets/icons/src-bubble.png?v=2" alt="" draggable="false">',
+  };
+  // 출처 문자열 앞단어 → 아이콘 매핑 (예: "YouTube 채널십오야" → ▶ 채널십오야)
+  const SRC_PREFIXES = [['YouTube ', 'youtube'], ['트위터 ', 'twitter'], ['X ', 'x'], ['네이버블로그 ', 'naver'], ['버블 ', 'bubble']];
+  function sourceHtml(source) {
+    for (let i = 0; i < SRC_PREFIXES.length; i++) {
+      const p = SRC_PREFIXES[i][0];
+      if (source.indexOf(p) === 0) {
+        return SRC_ICONS[SRC_PREFIXES[i][1]] + '<span class="src-txt">' + source.slice(p.length) + '</span>';
+      }
+    }
+    return '<span class="src-txt">' + source + '</span>';
+  }
+
+  // 연예인 "스타 표시" — 제목 첫 글자 왼쪽 위 골드 별 (그라데이션 def는 index.html)
+  const STAR_SVG = '<svg class="star-accent" viewBox="0 0 24 24" fill="url(#starGold)" aria-hidden="true"><path d="M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>';
+
   function renderGrid() {
     const filtered = getFiltered();
     countEl.textContent = filtered.length;
@@ -343,9 +366,9 @@
       const card = document.createElement('div');
       card.className = 'recipe-card';
       card.innerHTML = `
-        <div class="recipe-thumb" style="background:${r.img ? (r.imgBg || '#fff') : r.tint}">${r.img ? `<img class="recipe-thumb-img${r.imgFit === 'cover' ? ' recipe-thumb-img--cover' : ''}" src="${r.img}" alt="${r.name}" draggable="false" loading="lazy"${r.imgPosition ? ` style="object-position:${r.imgPosition}"` : ''}><div class="recipe-thumb-overlay">${r.source ? `<div class="recipe-thumb-source">${r.source}</div>` : ''}</div>` : `<span>${r.emoji}</span>`}<button class="fav-star${favorites.has(r.id) ? ' active' : ''}" data-id="${r.id}" type="button" aria-label="즐겨찾기"><svg width="18" height="18" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg></button></div>
+        <div class="recipe-thumb" style="background:${r.img ? (r.imgBg || '#fff') : r.tint}">${r.img ? `<img class="recipe-thumb-img${r.imgFit === 'cover' ? ' recipe-thumb-img--cover' : ''}" src="${r.img}" alt="${r.name}" draggable="false" loading="lazy"${r.imgPosition ? ` style="object-position:${r.imgPosition}"` : ''}><div class="recipe-thumb-overlay">${r.source ? `<div class="recipe-thumb-source">${sourceHtml(r.source)}</div>` : ''}</div>` : `<span>${r.emoji}</span>`}<button class="fav-star${favorites.has(r.id) ? ' active' : ''}" data-id="${r.id}" type="button" aria-label="즐겨찾기"><svg width="18" height="18" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg></button></div>
         <div class="recipe-body">
-          <h3 class="recipe-name${r.name.length >= 10 ? ' recipe-name--long' : ''}">${r.nameHtml || r.name}</h3>
+          <h3 class="recipe-name${r.name.length >= 10 ? ' recipe-name--long' : ''}${r.star ? ' has-star' : ''}">${r.star ? STAR_SVG : ''}${r.nameHtml || r.name}</h3>
           <span class="recipe-cat-label">${r.cat}</span>
           <span class="recipe-ver">${r.ver || ''}</span>
           <button class="like-btn${likedByMe.has(r.id) ? ' active' : ''}" data-id="${r.id}" type="button" aria-label="좋아요"><svg width="17" height="17" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg><span class="like-count">${getLikeCount(r.id)}</span></button>
