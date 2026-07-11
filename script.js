@@ -426,6 +426,7 @@
 
   function openModal(r) {
     currentModalRecipe = r;
+    syncTopbarH(); // 모바일 전체화면 패널이 상단바 바로 아래에서 시작하도록 열 때마다 재측정
     document.body.style.overflow = 'hidden';
     const modalNameEl = document.getElementById('modalName');
     if (r.nameHtml) modalNameEl.innerHTML = r.nameHtml; else modalNameEl.textContent = r.name;
@@ -481,6 +482,18 @@
   modalOverlay.addEventListener('click', closeModal);
   modalScroll.addEventListener('click', (e) => e.stopPropagation());
   modalClose.addEventListener('click', closeModal);
+
+  // 모바일 전체화면 상세: 오버레이가 상단바 아래에서 시작하도록 실제 높이를 CSS 변수로 전달
+  const topbarEl = document.querySelector('.topbar');
+  function syncTopbarH() {
+    document.documentElement.style.setProperty('--topbar-h', topbarEl.offsetHeight + 'px');
+  }
+  syncTopbarH();
+  window.addEventListener('resize', syncTopbarH);
+  // 상세가 열린 채 상단바(탭·검색·즐겨찾기 등)를 누르면 상세를 닫고 그 동작을 그대로 실행
+  topbarEl.addEventListener('click', () => {
+    if (modalOverlay.classList.contains('open')) closeModal();
+  }, true);
   modalFavBtn.addEventListener('click', () => {
     if (!currentModalRecipe) return;
     const id = currentModalRecipe.id;

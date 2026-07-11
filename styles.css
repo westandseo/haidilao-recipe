@@ -1028,6 +1028,27 @@ body {
   background: #D99C8C;
 }
 
+/* 모바일: 상세를 상단바 아래 전체화면 패널로 (데스크톱은 기존 모달 유지).
+   상단바는 그대로 보이고 계속 동작 — 탭·검색을 누르면 JS가 상세를 닫고 그 동작을 실행. */
+@media (max-width: 640px) {
+  .modal-overlay {
+    top: var(--topbar-h, 0px); /* JS가 상단바 실제 높이를 넣어줌 */
+    padding: 0;
+    background: none;
+    backdrop-filter: none;
+  }
+
+  .modal {
+    width: 100%;
+    max-width: none;
+    height: 100%;
+    max-height: none;
+    border-radius: 0;
+    box-shadow: none;
+    overscroll-behavior-y: contain; /* 맨 위에서 당겨도 브라우저 새로고침으로 안 번지게 */
+  }
+}
+
 .modal-header {
   position: relative;
   padding: 34px clamp(22px, 6vw, 40px) 22px;
