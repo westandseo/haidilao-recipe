@@ -1047,6 +1047,59 @@ body {
     box-shadow: none;
     overscroll-behavior-y: contain; /* 맨 위에서 당겨도 브라우저 새로고침으로 안 번지게 */
   }
+
+  /* 원본 썸네일 — 카드와 같은 1:1 이미지가 상단에 그대로 이어짐 */
+  .modal-thumb {
+    display: flex;
+    position: relative;
+    aspect-ratio: 1 / 1;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .modal-thumb-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .modal-thumb-emoji {
+    font-size: 88px;
+    line-height: 1;
+  }
+
+  /* X·책갈피: 이미지 위에서도 잘 보이게 흰 원형 배경 + 스크롤해도 항상 접근되도록 상단바 아래 고정.
+     (.modal 접두어 = 파일 뒤쪽의 기본 정의보다 특이성을 높여 확실히 이기기 위함) */
+  .modal .modal-close,
+  .modal .modal-fav-btn {
+    position: fixed;
+    top: calc(var(--topbar-h, 0px) + 12px);
+    background: rgba(255, 255, 255, .92);
+    box-shadow: 0 1px 6px rgba(43, 18, 13, .18);
+  }
+
+  .modal .modal-close { right: 14px; }
+  .modal .modal-fav-btn { right: 62px; }
+
+  /* 썸네일이 위에 있으니 헤더 상단 여백 축소(버튼 자리 불필요)
+     + 히어로 헤더: 크림→흰색 은은한 그라데이션(iOS 안전 — filter 미사용) */
+  .modal-header {
+    padding-top: 22px;
+    background: linear-gradient(180deg, #FAECE3 0%, #FDF6F1 55%, #FFFFFF 100%);
+    border-bottom: none;
+  }
+}
+
+/* 데스크톱은 썸네일 미표시(데스크톱 디자인은 모바일 확정 후 별도 작업) */
+@media (min-width: 641px) {
+  .modal-thumb { display: none; }
+}
+
+/* 카드→상세 히어로 전환 속도 (View Transitions 미지원 브라우저는 무시됨) */
+::view-transition-group(recipeHero) {
+  animation-duration: .32s;
 }
 
 .modal-header {
@@ -1400,6 +1453,52 @@ body {
 
 .modal-fav-btn.active svg path {
   fill: currentColor;
+}
+
+/* 모달 제목의 연예인 별 — 카드와 동일한 골드 별, 제목 크기에 맞게 확대 */
+.modal-name.has-star {
+  position: relative;
+}
+
+.modal-name .star-accent {
+  position: absolute;
+  left: -12px;
+  top: -11px;
+  width: 18px;
+  height: 18px;
+}
+
+/* 모달 하단 좋아요 — 레시피 다 보고 마지막에 누르는 동선(상단 혼잡 해소) */
+.modal-like-wrap {
+  display: flex;
+  justify-content: center;
+  padding: 4px 0 8px;
+}
+
+.modal-like-btn {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1.5px solid #EFD8CE;
+  background: #fff;
+  color: #B29288;
+  border-radius: 999px;
+  padding: 11px 26px;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  transition: color .15s, border-color .15s, transform .1s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.modal-like-btn:active {
+  transform: scale(.95);
+}
+
+.modal-like-btn.active {
+  color: var(--brand-red);
+  border-color: #F0B3A6;
 }
 
 .modal-name {

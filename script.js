@@ -360,7 +360,7 @@
           <button class="like-btn${likedByMe.has(r.id) ? ' active' : ''}" data-id="${r.id}" type="button" aria-label="좋아요"><svg width="17" height="17" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg><span class="like-count">${getLikeCount(r.id)}</span></button>
         </div>
       `;
-    card.addEventListener('click', opts.onOpen || (() => openModal(r)));
+    card.addEventListener('click', opts.onOpen || (() => openModal(r, card)));
     card.querySelector('.fav-star').addEventListener('click', (e) => {
       e.stopPropagation();
       const btn = e.currentTarget;
@@ -424,15 +424,30 @@
 
   let currentModalRecipe = null;
 
-  function openModal(r) {
+  function openModal(r, fromCard) {
     currentModalRecipe = r;
     syncTopbarH(); // 모바일 전체화면 패널이 상단바 바로 아래에서 시작하도록 열 때마다 재측정
     document.body.style.overflow = 'hidden';
+
+    // 원본 썸네일(모바일 전용 표시) — 카드와 동일한 이미지·출처 오버레이 재사용
+    const thumbEl = document.getElementById('modalThumb');
+    if (r.img) {
+      thumbEl.style.background = r.imgBg || '#fff';
+      thumbEl.innerHTML = '<img class="modal-thumb-img" src="' + r.img + '" alt="' + r.name + '" draggable="false">' +
+        '<div class="recipe-thumb-overlay">' + (r.source ? '<div class="recipe-thumb-source">' + sourceHtml(r.source) + '</div>' : '') + '</div>';
+    } else {
+      thumbEl.style.background = r.tint;
+      thumbEl.innerHTML = '<span class="modal-thumb-emoji">' + r.emoji + '</span>';
+    }
+
     const modalNameEl = document.getElementById('modalName');
-    if (r.nameHtml) modalNameEl.innerHTML = r.nameHtml; else modalNameEl.textContent = r.name;
+    modalNameEl.classList.toggle('has-star', !!r.star); // 연예인 별 — 카드와 동일
+    modalNameEl.innerHTML = (r.star ? STAR_SVG : '') + (r.nameHtml || r.name);
     document.getElementById('modalCat').textContent = r.cat;
     document.getElementById('modalDesc').textContent = r.desc;
     modalFavBtn.classList.toggle('active', favorites.has(r.id));
+    modalLikeBtn.classList.toggle('active', likedByMe.has(r.id));
+    modalLikeCount.textContent = getLikeCount(r.id);
 
     const orderWrap = document.getElementById('modalOrderWrap');
     if (r.order && r.order.length > 0) {
@@ -470,8 +485,31 @@
       tipWrap.style.display = 'none';
     }
 
-    modalOverlay.classList.add('open');
-    modalScroll.scrollTop = 0;
+    // 카드→상세 이미지 확대 전환 (View Transitions API).
+    // 모바일 + 이미지 카드에서만, 미지원 브라우저·감속 설정은 애니메이션 없이 즉시 열림.
+    const reveal = () => {
+      modalOverlay.classList.add('open');
+      modalScroll.scrollTop = 0;
+    };
+    const cardImg = fromCard && r.img ? fromCard.querySelector('.recipe-thumb-img') : null;
+    const canAnimate = cardImg && document.startViewTransition &&
+      window.matchMedia('(max-width: 640px)').matches &&
+      !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (canAnimate) {
+      cardImg.style.viewTransitionName = 'recipeHero'; // 이전 상태: 카드 이미지가 히어로
+      const vt = document.startViewTransition(() => {
+        cardImg.style.viewTransitionName = ''; // 같은 이름 중복이면 전환이 통째로 스킵되므로 넘겨줌
+        const mImg = thumbEl.querySelector('.modal-thumb-img');
+        if (mImg) mImg.style.viewTransitionName = 'recipeHero'; // 새 상태: 모달 이미지가 히어로
+        reveal();
+      });
+      vt.finished.finally(() => {
+        const mImg = thumbEl.querySelector('.modal-thumb-img');
+        if (mImg) mImg.style.viewTransitionName = '';
+      });
+    } else {
+      reveal();
+    }
   }
 
   function closeModal() {
@@ -482,6 +520,22 @@
   modalOverlay.addEventListener('click', closeModal);
   modalScroll.addEventListener('click', (e) => e.stopPropagation());
   modalClose.addEventListener('click', closeModal);
+
+  // 모달 하단 좋아요 — 그리드 카드의 하트 숫자도 재렌더 없이 동기화(이미지 깜빡임 방지)
+  const modalLikeBtn = document.getElementById('modalLikeBtn');
+  const modalLikeCount = document.getElementById('modalLikeCount');
+  modalLikeBtn.addEventListener('click', () => {
+    if (!currentModalRecipe) return;
+    const id = currentModalRecipe.id;
+    toggleLike(id);
+    modalLikeBtn.classList.toggle('active', likedByMe.has(id));
+    modalLikeCount.textContent = getLikeCount(id);
+    const gridBtn = document.querySelector('.recipe-grid .like-btn[data-id="' + id + '"]');
+    if (gridBtn) {
+      gridBtn.classList.toggle('active', likedByMe.has(id));
+      gridBtn.querySelector('.like-count').textContent = getLikeCount(id);
+    }
+  });
 
   // 모바일 전체화면 상세: 오버레이가 상단바 아래에서 시작하도록 실제 높이를 CSS 변수로 전달
   const topbarEl = document.querySelector('.topbar');
