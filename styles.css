@@ -1029,27 +1029,61 @@ body {
   background: #D99C8C;
 }
 
-/* 모바일: 상세를 상단바 아래 전체화면 패널로 (데스크톱은 기존 모달 유지).
+/* 모바일: 상세를 상단바 아래 TCG 카드 프레임으로 (데스크톱은 기존 모달 유지).
+   .modal = 카테고리색 프레임(화면 고정) / .modal-card = 흰 카드 본체(내부만 스크롤).
    상단바는 그대로 보이고 계속 동작 — 탭·검색을 누르면 JS가 상세를 닫고 그 동작을 실행. */
 @media (max-width: 640px) {
   .modal-overlay {
     top: var(--topbar-h, 0px); /* JS가 상단바 실제 높이를 넣어줌 */
-    padding: 0;
-    background: none;
+    padding: 8px; /* 프레임 둘레 여백 — 뒤로 페이지 크림색이 보임 */
+    background: var(--bg-card);
     backdrop-filter: none;
   }
 
+  /* 프레임 밴드 — 카테고리별 색. 색 세트(밴드·라인·배지·본체 틴트)는 여기 변수만 고치면 전부 연동됨 */
   .modal {
+    --frame: #E6D4BA;
+    --frame-line: #D9C3A8;
+    --badge-bg: #F5EFEC;
+    --badge-ink: #8A7A73;
+    --card-bg: #FCF8F3;
+    position: relative; /* 밴드 위 배지(absolute) 기준 */
     width: 100%;
     max-width: none;
     height: 100%;
     max-height: none;
-    border-radius: 0;
+    border-radius: 18px;
     box-shadow: none;
-    overscroll-behavior-y: contain; /* 맨 위에서 당겨도 브라우저 새로고침으로 안 번지게 */
+    background: var(--frame);
+    /* 상단 밴드를 두껍게 — 배지(좌)·X·책갈피(우)가 앉는 카드 헤더 */
+    padding: 50px 9px 9px;
+    box-sizing: border-box;
+    overflow: hidden; /* 프레임은 고정, 스크롤은 .modal-card가 담당 */
+    display: flex;
+    flex-direction: column;
   }
 
-  /* 원본 썸네일 — 카드와 같은 1:1 이미지가 상단에 그대로 이어짐 */
+  .modal[data-cat="소스"] { --frame: #E0A294; --frame-line: #C98B7D; --badge-bg: #F6DDD5; --badge-ink: #8F4536; --card-bg: #FBF0EC; }
+  .modal[data-cat="육수"] { --frame: #E0BE7E; --frame-line: #C4A163; --badge-bg: #F6EAD0; --badge-ink: #7A5A1F; --card-bg: #FBF4E6; }
+  .modal[data-cat="밥"]   { --frame: #B9C4A3; --frame-line: #9BA983; --badge-bg: #E9EEDD; --badge-ink: #55663D; --card-bg: #F3F6EB; }
+  .modal[data-cat="면"]   { --frame: #AFC5CF; --frame-line: #8FA8B4; --badge-bg: #E3EDF1; --badge-ink: #44606D; --card-bg: #F0F5F7; }
+  .modal[data-cat="기타"] { --frame: #CFC5BD; --frame-line: #B3A79D; --badge-bg: #EFEAE5; --badge-ink: #6E635A; --card-bg: #F6F3EF; }
+
+  /* 카드 본체 — 카테고리색 옅은 틴트(포켓몬 카드처럼 본체도 속성색), 프레임 안에서 내용만 스크롤 */
+  .modal-card {
+    flex: 1;
+    min-height: 0;
+    background: var(--card-bg, #fff);
+    border: 1px solid var(--frame-line);
+    border-radius: 10px;
+    overflow-y: auto;
+    overscroll-behavior-y: contain; /* 맨 위에서 당겨도 브라우저 새로고침으로 안 번지게 */
+    scrollbar-width: none; /* 카드 안 스크롤바는 숨김(폭이 좁아 거슬림) */
+  }
+
+  .modal-card::-webkit-scrollbar { display: none; }
+
+  /* 원본 썸네일 — 프레임 안의 "아트 창"(인셋 + 라운드 + 얇은 테두리), 이름 행 아래 */
   .modal-thumb {
     display: flex;
     position: relative;
@@ -1057,6 +1091,9 @@ body {
     align-items: center;
     justify-content: center;
     overflow: hidden;
+    margin: 0 10px;
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
   }
 
   .modal-thumb-img {
@@ -1071,35 +1108,54 @@ body {
     line-height: 1;
   }
 
-  /* X·책갈피: 이미지 위에서도 잘 보이게 흰 원형 배경 + 스크롤해도 항상 접근되도록 상단바 아래 고정.
-     (.modal 접두어 = 파일 뒤쪽의 기본 정의보다 특이성을 높여 확실히 이기기 위함) */
+  /* X·책갈피: 프레임 상단 밴드 오른쪽(배지 반대편)에 흰 원형 버튼.
+     (.modal 접두어 = 파일 뒤쪽의 기본 정의보다 특이성을 높여 확실히 이기기 위함)
+     오프셋 = 오버레이 8px + 밴드(50px) 안 가운데 정렬 */
   .modal .modal-close,
   .modal .modal-fav-btn {
     position: fixed;
-    top: calc(var(--topbar-h, 0px) + 12px);
+    top: calc(var(--topbar-h, 0px) + 14px);
     background: rgba(255, 255, 255, .92);
     box-shadow: 0 1px 6px rgba(43, 18, 13, .18);
+    z-index: 5; /* 스크롤 시 썸네일(뒤 DOM의 relative 요소)에 가려지지 않게 */
   }
 
-  .modal .modal-close { right: 14px; }
-  .modal .modal-fav-btn { right: 62px; }
+  .modal .modal-close { right: 20px; }
+  .modal .modal-fav-btn { right: 68px; }
 
 }
 
-/* 데스크톱은 썸네일 미표시(데스크톱 디자인은 모바일 확정 후 별도 작업) */
+/* 데스크톱은 썸네일 미표시(데스크톱 디자인은 모바일 확정 후 별도 작업).
+   배지는 기존처럼 이름 위 알약, 연도는 데스크톱 미표시 — 기존 모습 유지 */
 @media (min-width: 641px) {
   .modal-thumb { display: none; }
+  .modal-cat { margin: 34px 0 0 clamp(22px, 6vw, 40px); }
+  .modal-ver { display: none; }
+  .modal-desc {
+    padding: 0 clamp(22px, 6vw, 40px) 22px;
+    border-bottom: 1px solid #F7DCD3;
+  }
 }
 
-/* 카드→상세 히어로 전환 속도 (View Transitions 미지원 브라우저는 무시됨) */
-::view-transition-group(recipeHero) {
-  animation-duration: .32s;
+/* 배지는 .modal 직속(모바일: 프레임 밴드 위 / 데스크톱: 이름 위 알약),
+   이름 행에는 연도(.modal-ver)가 이름 뒤를 따라감. */
+.modal-card {
+  position: relative; /* 데스크톱 X·책갈피 absolute 기준 */
 }
 
 .modal-header {
-  position: relative;
-  padding: 34px clamp(22px, 6vw, 40px) 22px;
-  border-bottom: 1px solid #F7DCD3;
+  display: flex;
+  align-items: baseline;
+  gap: 9px;
+  flex-wrap: wrap;
+  padding: 0 clamp(22px, 6vw, 40px);
+}
+
+.modal-ver {
+  font-size: 13px;
+  font-weight: 500;
+  color: #9A8A83;
+  font-family: 'Noto Sans KR', sans-serif;
 }
 
 .modal-close {
@@ -1486,8 +1542,20 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 
+/* 마우스 올리면(데스크톱)·살짝 터치하면(모바일 :active) 로즈 톤으로 살짝 반응 */
+@media (hover: hover) {
+  .modal-like-btn:hover {
+    color: var(--brand-red);
+    border-color: #F0B3A6;
+    background: #FDF1EE;
+  }
+}
+
 .modal-like-btn:active {
   transform: scale(.95);
+  color: var(--brand-red);
+  border-color: #F0B3A6;
+  background: #FDF1EE;
 }
 
 .modal-like-btn svg path {
@@ -1868,29 +1936,104 @@ body {
   font-weight: 700;
 }
 
-/* ══ 모바일 상세: 레시피 메모 컨셉 ══
+/* ══ 모바일 상세: TCG 카드 내부 ══
    (파일 맨 끝에 두는 이유: 위쪽 기본 규칙들과 특이성이 같아 소스 순서로 이겨야 함)
-   썸네일이 히어로 역할이므로 헤더는 흰 종이처럼 깔끔하게, 구획은 실선 대신 점선 —
-   종이에 적은 레시피 카드 느낌. */
+   헤더 = 그리드 카드의 2×2를 미러링: 이름+별 행 → 부제 행(버전 좌 / 카테고리 배지 우).
+   배지·프레임 색은 .modal의 카테고리 변수 세트에 연동. 재료표 = TCG의 "효과 텍스트 박스". */
 @media (max-width: 640px) {
-  .modal-cat { display: none; } /* 배지 제거: 탭·썸네일로 이미 아는 정보라 제목이 첫 자리 */
-
+  /* 이름 행(썸네일 위) — 이름+별 왼쪽, 연도는 오른쪽 끝(포켓몬 HP 자리) */
   .modal-header {
-    padding-top: 18px;
-    border-bottom: 1.5px dashed #E3C7B8;
+    padding: 14px 16px 10px;
+    justify-content: space-between;
   }
 
   .modal-header .modal-name { margin-top: 0; }
 
-  /* 재료표: 크림 채움 박스 → 행 사이 점선의 레시피 메모 스타일 */
-  .ing-box {
+  /* 카테고리 배지 — 프레임 상단 밴드 왼쪽(포켓몬 스테이지 마크 자리) */
+  .modal-cat {
+    position: absolute;
+    top: 12px;
+    left: 16px;
+    margin: 0;
+    font-size: 13px;
+    padding: 5px 13px;
+    background: var(--badge-bg);
+    color: var(--badge-ink);
+    border: none;
+  }
+
+  /* 설명 — 아트 창 바로 아래 테두리 박스(TCG 플레이버 텍스트) */
+  .modal-desc {
+    margin: 12px 16px 0;
+    padding: 10px 14px;
+    background: #fff;
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+  }
+
+  .modal-body { padding: 18px 16px 34px; }
+
+  /* 팁: "나만의 팁" 제목 없이 박스 안 문장 앞에 💡만 (박스 자체가 이미 눈에 띄어 제목 중복).
+     박스는 주문·재료·설명과 같은 흰 박스 문법으로 통일 */
+  #modalTipWrap .modal-section-title { display: none; }
+
+  /* 💡는 만드는 법 숫자처럼 별도 열 — 줄바꿈된 문장이 이모지 아래를 침범하지 않음 */
+  .tip-box {
+    background: #fff;
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+  }
+
+  .tip-box::before { content: '💡'; }
+
+  /* 긴 문장은 어절 단위로만 줄바꿈 (단어 중간에서 안 끊기게)
+     — 설명(.modal-desc)은 제외: 어절 단위가 오히려 어색해지는 문장이 있어 사용자가 직접 관리 */
+  .tip-box,
+  .step-text { word-break: keep-all; }
+
+  /* 만드는 법도 다른 섹션과 같은 흰 박스로 — 본체 위 요소는 전부 박스 문법 통일.
+     번호마다 재료 행과 같은 은은한 구분선 */
+  .steps-list {
+    background: #fff;
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+    padding: 4px 14px;
+    gap: 0;
+  }
+
+  .step-row {
+    padding: 12px 0;
+    border-bottom: 1px solid #F0E2D2;
+  }
+
+  .step-row:last-child {
+    border-bottom: none;
+  }
+
+  /* 만드는 법 숫자: 원 없이 빨간 숫자만 (재료 양 숫자와 같은 문법) */
+  .step-num {
     background: none;
+    border: none;
+    color: var(--brand-red);
+    font-size: 15px;
+    width: 18px;
+    height: auto;
     border-radius: 0;
-    padding: 0 2px;
+  }
+
+  /* 재료표: 밝은 텍스트 박스 — 틴트 본체 위에서 TCG 효과 텍스트 박스처럼 도드라지게 */
+  .ing-box {
+    background: #fff;
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+    padding: 4px 14px;
   }
 
   .ing-row {
-    border-bottom: 1.5px dotted #DCC3B6;
+    border-bottom: 1px solid #F0E2D2;
   }
 
   .ing-row:last-child {

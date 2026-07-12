@@ -362,7 +362,7 @@
           <button class="like-btn${likedByMe.has(r.id) ? ' active' : ''}" data-id="${r.id}" type="button" aria-label="좋아요"><svg width="17" height="17" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg><span class="like-count">${getLikeCount(r.id)}</span></button>
         </div>
       `;
-    card.addEventListener('click', opts.onOpen || (() => openModal(r, card)));
+    card.addEventListener('click', opts.onOpen || (() => openModal(r)));
     card.querySelector('.fav-star').addEventListener('click', (e) => {
       e.stopPropagation();
       const btn = e.currentTarget;
@@ -426,7 +426,7 @@
 
   let currentModalRecipe = null;
 
-  function openModal(r, fromCard) {
+  function openModal(r) {
     currentModalRecipe = r;
     syncTopbarH(); // 모바일 전체화면 패널이 상단바 바로 아래에서 시작하도록 열 때마다 재측정
     document.body.style.overflow = 'hidden';
@@ -445,7 +445,9 @@
     const modalNameEl = document.getElementById('modalName');
     modalNameEl.classList.toggle('has-star', !!r.star); // 연예인 별 — 카드와 동일
     modalNameEl.innerHTML = (r.star ? STAR_SVG : '') + (r.nameHtml || r.name);
+    modalScroll.dataset.cat = r.cat; // 모바일 TCG 프레임·배지 색 스위치 (CSS 변수 세트)
     document.getElementById('modalCat').textContent = r.cat;
+    document.getElementById('modalVer').textContent = r.ver || '';
     document.getElementById('modalDesc').textContent = r.desc;
     modalFavBtn.classList.toggle('active', favorites.has(r.id));
     modalLikeBtn.classList.toggle('active', likedByMe.has(r.id));
@@ -487,31 +489,10 @@
       tipWrap.style.display = 'none';
     }
 
-    // 카드→상세 이미지 확대 전환 (View Transitions API).
-    // 모바일 + 이미지 카드에서만, 미지원 브라우저·감속 설정은 애니메이션 없이 즉시 열림.
-    const reveal = () => {
-      modalOverlay.classList.add('open');
-      modalScroll.scrollTop = 0;
-    };
-    const cardImg = fromCard && r.img ? fromCard.querySelector('.recipe-thumb-img') : null;
-    const canAnimate = cardImg && document.startViewTransition &&
-      window.matchMedia('(max-width: 640px)').matches &&
-      !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (canAnimate) {
-      cardImg.style.viewTransitionName = 'recipeHero'; // 이전 상태: 카드 이미지가 히어로
-      const vt = document.startViewTransition(() => {
-        cardImg.style.viewTransitionName = ''; // 같은 이름 중복이면 전환이 통째로 스킵되므로 넘겨줌
-        const mImg = thumbEl.querySelector('.modal-thumb-img');
-        if (mImg) mImg.style.viewTransitionName = 'recipeHero'; // 새 상태: 모달 이미지가 히어로
-        reveal();
-      });
-      vt.finished.finally(() => {
-        const mImg = thumbEl.querySelector('.modal-thumb-img');
-        if (mImg) mImg.style.viewTransitionName = '';
-      });
-    } else {
-      reveal();
-    }
+    // 확대 전환 애니메이션은 제거됨(2026-07-12 사용자 결정) — 즉시 열림
+    modalOverlay.classList.add('open');
+    modalScroll.scrollTop = 0; // 데스크톱 스크롤 컨테이너
+    document.getElementById('modalCard').scrollTop = 0; // 모바일 스크롤 컨테이너(카드 본체)
   }
 
   function closeModal() {
