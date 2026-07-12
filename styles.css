@@ -413,7 +413,7 @@ body {
   width: 100%;
   max-width: 1160px;
   margin: 0 auto;
-  padding: 34px clamp(20px, 5vw, 40px) 70px;
+  padding: 24px clamp(20px, 5vw, 40px) 70px;
 }
 
 .list-head {
@@ -421,7 +421,7 @@ body {
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  margin: 0 0 22px;
+  margin: 0 0 16px;
 }
 
 .count-line {
@@ -553,16 +553,53 @@ body {
   row-gap: 28px;
 }
 
+/* 카테고리 색 세트 — 카드(그리드·가챠)와 상세가 공유.
+   프레임(밴드·테두리)은 크림 고정, 카테고리 색은 배지·본체 틴트로만 표현.
+   색 조정은 여기 한 곳만 고치면 배지·본체 틴트가 전부 연동됨. */
+[data-cat="소스"] { --frame-line: #C98B7D; --badge-bg: #F6DDD5; --badge-ink: #8F4536; --card-bg: #FBF0EC; }
+[data-cat="육수"] { --frame-line: #C4A163; --badge-bg: #F6EAD0; --badge-ink: #7A5A1F; --card-bg: #FBF4E6; }
+[data-cat="밥"]   { --frame-line: #9BA983; --badge-bg: #E9EEDD; --badge-ink: #55663D; --card-bg: #F3F6EB; }
+[data-cat="면"]   { --frame-line: #8FA8B4; --badge-bg: #E3EDF1; --badge-ink: #44606D; --card-bg: #F0F5F7; }
+[data-cat="기타"] { --frame-line: #B3A79D; --badge-bg: #EFEAE5; --badge-ink: #6E635A; --card-bg: #F6F3EF; }
+
+/* 넓은 밴드는 크림 고정 — 메인 카드·상세 공통. 밴드와 본체 사이 얇은 선(--frame-line)은 카테고리색 */
+.recipe-card, .modal { --frame: #E6D4BA; }
+
+/* 메인 그리드 카드 = TCG 카드 프레임. data-cat이 색을 결정.
+   상단 밴드(배지 좌 + 즐겨찾기 우) → 아트창 → 이름·연도 → 좋아요(아래 가운데) */
 .recipe-card {
+  --band-h: 38px; /* 상단 밴드 높이 = 배지·즐겨찾기 세로 중앙 정렬 기준 */
   cursor: pointer;
-  background: #fff;
-  border: 1.5px solid var(--card-border);
-  border-radius: 14px;
+  position: relative; /* 밴드 위 배지·즐겨찾기(absolute) 기준 */
+  background: var(--frame, #E6D4BA);
+  border: none;
+  border-radius: 16px;
   box-shadow: 0 1px 3px rgba(43, 18, 13, .10);
   overflow: hidden;
+  /* 상단 밴드 — 배지·즐겨찾기가 앉는 헤더. 좌우하는 프레임 테두리 두께 */
+  padding: var(--band-h) 7px 7px;
   display: flex;
   flex-direction: column;
-  transition: transform .15s, box-shadow .15s, border-color .15s;
+  transition: transform .15s, box-shadow .15s;
+}
+
+/* 모바일: 프레임 좌·우·하단 테두리를 더 얇게 (상단 밴드는 배지 때문에 유지) */
+@media (max-width: 640px) {
+  .recipe-card {
+    --band-h: 34px;
+    padding-left: 4px;
+    padding-right: 4px;
+    padding-bottom: 4px;
+    border-radius: 13px;
+  }
+}
+
+/* 프레임 안 흰 본체 — 아트창 + 텍스트를 감싸 카드/프레임 이중 테두리 */
+.recipe-card-inner {
+  background: #fff;
+  border: 1px solid var(--frame-line, #D9C3A8);
+  border-radius: 11px;
+  overflow: hidden;
 }
 
 .empty-state {
@@ -577,28 +614,16 @@ body {
 @media (hover: hover) {
   .recipe-card:hover {
     transform: translateY(-4px);
-    border-color: var(--card-hover-border);
-    box-shadow: 0 8px 20px rgba(43, 18, 13, .12);
+    box-shadow: 0 8px 20px rgba(43, 18, 13, .16);
   }
 }
 
 /* 모바일 탭(누를 때) 반응 — hover 없는 터치기기용.
-   단, 좋아요·책갈피 버튼을 누를 땐 카드 테두리·썸네일 확대 반응 제외(:active 전파 차단) */
+   단, 좋아요·책갈피 버튼을 누를 땐 썸네일 확대·제목 반응 제외(:active 전파 차단) */
 @media (hover: none) {
-  .recipe-card:active {
-    border-color: var(--card-hover-border);
-  }
-  .recipe-card:has(.fav-star:active),
-  .recipe-card:has(.like-btn:active) {
-    border-color: var(--card-border);
-  }
   .recipe-card:has(.fav-star:active) .recipe-thumb-img,
   .recipe-card:has(.like-btn:active) .recipe-thumb-img {
     transform: none;
-  }
-  .recipe-card:has(.fav-star:active) .recipe-name,
-  .recipe-card:has(.like-btn:active) .recipe-name {
-    color: var(--text-dark);
   }
 }
 
@@ -699,23 +724,23 @@ body {
   padding: 0;
 }
 
+/* 즐겨찾기 — 크림 밴드 오른쪽(밴드 세로 중앙). 카테고리 무관 중립 회갈색(기능 버튼) */
 .fav-star {
   position: absolute;
-  top: 6px;
-  right: 6px;
-  width: 28px;
-  height: 28px;
+  top: 0;
+  right: 8px;
+  width: 30px;
+  height: var(--band-h);
   display: flex;
   align-items: center;
   justify-content: center;
   border: none;
   background: none;
-  color: #fff;
-  /* 진한 드롭섀도우로 흰 테두리 없이도 대비 확보(B+) — 어두운 썸네일 위에서도 또렷 */
-  filter: drop-shadow(0 0 2px rgba(0, 0, 0, .95)) drop-shadow(0 1px 4px rgba(0, 0, 0, .7));
+  color: #A8968D;
   cursor: pointer;
   transition: transform .15s;
   -webkit-tap-highlight-color: transparent;
+  z-index: 2;
 }
 
 .fav-star:hover {
@@ -726,20 +751,17 @@ body {
   transition: fill .15s;
 }
 
-/* 즐겨찾기됨: 빨간 채움만(흰 테두리 없이 깔끔). 모달과 같은 빨강, 대비는 위 드롭섀도우가 담당 */
+/* 즐겨찾기됨: 브랜드 빨강 채움 */
 .fav-star.active svg path {
   fill: var(--brand-red);
   stroke: none;
 }
 
-/* 모바일: 손가락 탭 영역을 40px로 넉넉히(보이는 배경 없음), 아이콘 글리프는 19px로 살짝 키움.
-   top/right 2px로 두면 글리프가 지금과 거의 같은 코너 위치에 유지됨 */
+/* 모바일: 탭 영역 넉넉히(폭) + 글리프 살짝 키움, 높이는 밴드에 맞춰 세로 중앙 */
 @media (max-width: 640px) {
   .fav-star {
-    width: 40px;
-    height: 40px;
-    top: 2px;
-    right: 2px;
+    width: 38px;
+    right: 5px;
   }
   .fav-star svg {
     width: 19px;
@@ -791,25 +813,31 @@ body {
   }
 }
 
+/* 이름+별(좌)·연도(우) 한 행 → 좋아요(아래 가운데).
+   상세 본체와 같은 카테고리 옅은 틴트 — 카드 텍스트 영역이 상세 열었을 때와 같은 톤 */
 .recipe-body {
-  padding: 11px 14px 12px;
+  padding: 10px 14px 7px;
+  background: var(--card-bg, #fff);
   display: grid;
   grid-template-columns: 1fr auto;
-  column-gap: 10px;
+  align-items: baseline;
+  column-gap: 8px;
   row-gap: 6px;
 }
 
-/* B 배치: 이름=좌상, 하트=우상, 버전=좌하, 배지=우하 */
+/* 카테고리 배지 — 크림 밴드 왼쪽. 카테고리색 알약 + 카테고리색 테두리(얇은 선과 동일), 밴드 세로 중앙 */
 .recipe-cat-label {
-  grid-column: 2;
-  grid-row: 2;
-  justify-self: end;
-  align-self: end;
+  position: absolute;
+  top: calc(var(--band-h) / 2);
+  left: 11px;
+  transform: translateY(-50%);
+  z-index: 2;
   display: inline-block;
   font-size: 11px;
-  padding: 3px 9px;
-  background: rgba(43, 18, 13, .06);
-  color: #8A7A73;
+  padding: 3px 10px;
+  background: var(--badge-bg, rgba(43, 18, 13, .06));
+  color: var(--badge-ink, #8A7A73);
+  border: 1px solid var(--frame-line, #D9C3A8);
   border-radius: 999px;
   font-weight: 700;
   font-family: 'Noto Sans KR', sans-serif;
@@ -818,7 +846,7 @@ body {
 .recipe-name {
   grid-column: 1;
   grid-row: 1;
-  align-self: start;
+  align-self: baseline;
   min-width: 0;
   white-space: nowrap;
   overflow: hidden;
@@ -854,9 +882,10 @@ body {
 }
 
 .recipe-ver {
-  grid-column: 1;
-  grid-row: 2;
-  align-self: end;
+  grid-column: 2;
+  grid-row: 1;
+  justify-self: end;
+  align-self: baseline;
   display: block;
   margin: 0;
   font-family: 'Noto Sans KR', sans-serif;
@@ -864,14 +893,13 @@ body {
   font-weight: 400;
   color: #A88F87;
   line-height: 1.3;
-  min-height: 17px;
+  white-space: nowrap;
 }
 
 .recipe-body .like-btn {
-  grid-column: 2;
-  grid-row: 1;
-  justify-self: end;
-  align-self: start;
+  grid-column: 1 / -1;
+  grid-row: 2;
+  justify-self: center;
 }
 
 @media (hover: hover) {
@@ -895,9 +923,9 @@ body {
   }
 
   .recipe-body {
-    padding: 9px 11px 10px;
+    padding: 9px 11px 6px;
     column-gap: 8px;
-    row-gap: 4px;
+    row-gap: 5px;
   }
 
   .recipe-name {
@@ -1043,10 +1071,6 @@ body {
   /* 프레임 밴드 — 카테고리별 색. 색 세트(밴드·라인·배지·본체 틴트)는 여기 변수만 고치면 전부 연동됨 */
   .modal {
     --frame: #E6D4BA;
-    --frame-line: #D9C3A8;
-    --badge-bg: #F5EFEC;
-    --badge-ink: #8A7A73;
-    --card-bg: #FCF8F3;
     position: relative; /* 밴드 위 배지(absolute) 기준 */
     width: 100%;
     max-width: none;
@@ -1054,7 +1078,7 @@ body {
     max-height: none;
     border-radius: 18px;
     box-shadow: none;
-    background: var(--frame);
+    background: var(--frame, #E6D4BA);
     /* 상단 밴드를 두껍게 — 배지(좌)·X·책갈피(우)가 앉는 카드 헤더 */
     padding: 50px 9px 9px;
     box-sizing: border-box;
@@ -1062,12 +1086,6 @@ body {
     display: flex;
     flex-direction: column;
   }
-
-  .modal[data-cat="소스"] { --frame: #E0A294; --frame-line: #C98B7D; --badge-bg: #F6DDD5; --badge-ink: #8F4536; --card-bg: #FBF0EC; }
-  .modal[data-cat="육수"] { --frame: #E0BE7E; --frame-line: #C4A163; --badge-bg: #F6EAD0; --badge-ink: #7A5A1F; --card-bg: #FBF4E6; }
-  .modal[data-cat="밥"]   { --frame: #B9C4A3; --frame-line: #9BA983; --badge-bg: #E9EEDD; --badge-ink: #55663D; --card-bg: #F3F6EB; }
-  .modal[data-cat="면"]   { --frame: #AFC5CF; --frame-line: #8FA8B4; --badge-bg: #E3EDF1; --badge-ink: #44606D; --card-bg: #F0F5F7; }
-  .modal[data-cat="기타"] { --frame: #CFC5BD; --frame-line: #B3A79D; --badge-bg: #EFEAE5; --badge-ink: #6E635A; --card-bg: #F6F3EF; }
 
   /* 카드 본체 — 카테고리색 옅은 틴트(포켓몬 카드처럼 본체도 속성색), 프레임 안에서 내용만 스크롤 */
   .modal-card {
@@ -1402,20 +1420,22 @@ body {
 /* 가챠 결과 카드 = 메인 그리드 카드(.recipe-card)와 동일. 폭만 모달에 맞게 고정.
    컨테이너는 클릭 통과(pointer-events:none)라 카드만 다시 클릭 가능하게 켠다.
    모달의 text-align:center가 상속되지 않게 메인 카드처럼 왼쪽 정렬로 되돌린다. */
-.gacha-result .recipe-card { width: 190px; pointer-events: auto; text-align: left; }
+/* 가챠 카드는 좁아서(162px) 밴드를 얇게 — 즐겨찾기 숨기고 배지만 얹음 */
+.gacha-result .recipe-card { --band-h: 28px; width: 190px; pointer-events: auto; text-align: left; padding: var(--band-h) 6px 6px; }
 /* 모바일은 실제 그리드 카드 폭(162px)과 동일하게 — 작은 모달에서도 버튼과 안 겹침 */
 @media (max-width: 767px) {
   .gacha-result .recipe-card { width: 162px; }
 }
 /* 가챠 카드는 데스크톱에서도 폭이 모바일 그리드 카드(162px)급이므로,
    데스크톱 타이포(24px 등)를 쓰면 제목이 잘림 → 모바일 카드와 같은 크기를 항상 적용 */
-.gacha-result .recipe-body { padding: 9px 11px 10px; column-gap: 8px; row-gap: 4px; }
+.gacha-result .recipe-body { padding: 9px 11px 10px; column-gap: 8px; }
 .gacha-result .recipe-name { font-size: 15px; }
 .gacha-result .recipe-name--long { font-size: 13px; }
-.gacha-result .recipe-ver { font-size: 12px; min-height: 15px; }
+.gacha-result .recipe-ver { font-size: 12px; }
+.gacha-result .recipe-cat-label { left: 10px; }
 
 /* 가챠 결과 카드에선 좋아요·책갈피 숨김(뽑기 결과 확인용이라 불필요). 카테고리 배지는 표시.
-   카드 클릭 → 레시피 모달은 유지. 제목·연도는 메인 카드와 동일하게 왼쪽 정렬. */
+   카드 클릭 → 레시피 모달은 유지. */
 .gacha-result .fav-star,
 .gacha-result .like-btn { display: none; }
 
@@ -1959,7 +1979,7 @@ body {
     padding: 5px 13px;
     background: var(--badge-bg);
     color: var(--badge-ink);
-    border: none;
+    border: 1px solid var(--frame-line, #D9C3A8);
   }
 
   /* 설명 — 아트 창 바로 아래 테두리 박스(TCG 플레이버 텍스트) */
