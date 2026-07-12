@@ -974,7 +974,7 @@
   }
 
   // 친구에게 공유
-  const shareBtn = document.getElementById('shareBtn');
+  const favShareBtn = document.getElementById('favShareBtn');
   const topShareBtn = document.getElementById('topShareBtn');
   const shareToast = document.getElementById('shareToast');
   let shareToastTimer = null;
@@ -1004,6 +1004,6 @@
     }
   }
 
-  shareBtn.addEventListener('click', shareSite);
+  favShareBtn.addEventListener('click', shareSite);
   topShareBtn.addEventListener('click', shareSite);
 })();
