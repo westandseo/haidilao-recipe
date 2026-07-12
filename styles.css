@@ -733,6 +733,9 @@ body {
 .recipe-thumb-source .src-ic--yt { width: 16px; height: 16px; }
 .recipe-thumb-source .src-ic--tw { width: 15px; height: 15px; }
 .recipe-thumb-source .src-ic--gm { width: 15px; height: 15px; }
+/* MBC는 가로 워드마크(3.4:1) → 높이 고정, 너비 자동(비율 유지). img.src-ic(15×15)보다 특이성 높게. */
+.recipe-thumb-source img.src-ic.src-ic--mbc { width: auto; height: 11px; }
+.recipe-thumb-source .src-ic--ig { width: 19px; height: 19px; }
 
 .recipe-thumb-source .src-txt {
   min-width: 0;
