@@ -358,7 +358,7 @@
         <span class="recipe-cat-label">${r.cat}</span>
         <button class="fav-star${favorites.has(r.id) ? ' active' : ''}" data-id="${r.id}" type="button" aria-label="즐겨찾기"><svg width="18" height="18" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg></button>
         <div class="recipe-card-inner">
-          <div class="recipe-thumb" style="background:${r.img ? (r.imgBg || '#fff') : r.tint}">${r.img ? `<img class="recipe-thumb-img${r.imgFit === 'cover' ? ' recipe-thumb-img--cover' : ''}" src="${r.img}" alt="${r.name}" draggable="false" loading="lazy"${r.imgPosition ? ` style="object-position:${r.imgPosition}"` : ''}><div class="recipe-thumb-overlay">${showSource ? `<div class="recipe-thumb-source">${sourceHtml(r.source)}</div>` : ''}</div>` : `<span>${r.emoji}</span>`}</div>
+          <div class="recipe-thumb" style="background:${r.img ? (r.imgBg || '#fff') : r.tint}">${r.img ? `<img class="recipe-thumb-img${r.imgFit === 'cover' ? ' recipe-thumb-img--cover' : ''}" src="${r.img}" alt="${r.name}" draggable="false" loading="${opts.eager ? 'eager' : 'lazy'}"${r.imgPosition ? ` style="object-position:${r.imgPosition}"` : ''}><div class="recipe-thumb-overlay">${showSource ? `<div class="recipe-thumb-source">${sourceHtml(r.source)}</div>` : ''}</div>` : `<span>${r.emoji}</span>`}</div>
           <div class="recipe-body">
             <h3 class="recipe-name${r.name.length >= 10 ? ' recipe-name--long' : ''}${r.star ? ' has-star' : ''}">${r.star ? STAR_SVG : ''}${r.nameHtml || r.name}</h3>
             <span class="recipe-ver">${r.ver || ''}</span>
@@ -392,6 +392,10 @@
     return card;
   }
 
+  // 카드 DOM 캐시 — 레시피당 한 번만 생성하고 탭·정렬·검색 때는 같은 노드를 재배치만 한다.
+  // 매번 새로 만들면 <img>가 재디코딩되어 썸네일이 깜빡이고 늦게 뜸(탭 이동 시 딜레이의 원인).
+  const cardCache = new Map();
+
   function renderGrid() {
     const filtered = getFiltered();
     countEl.textContent = filtered.length;
@@ -410,7 +414,18 @@
       return;
     }
     filtered.forEach((r) => {
-      gridEl.appendChild(buildCard(r));
+      let el = cardCache.get(r.id);
+      if (!el) {
+        el = buildCard(r);
+        cardCache.set(r.id, el);
+      } else {
+        // 캐시된 카드가 그리드 밖에 있는 동안 모달 등에서 상태가 바뀌었을 수 있어 다시 동기화
+        el.querySelector('.fav-star').classList.toggle('active', favorites.has(r.id));
+        const lb = el.querySelector('.like-btn');
+        lb.classList.toggle('active', likedByMe.has(r.id));
+        lb.querySelector('.like-count').textContent = getLikeCount(r.id);
+      }
+      gridEl.appendChild(el);
     });
   }
 
@@ -750,7 +765,8 @@
       // 카드는 opacity 0(리셋 상태)로 먼저 그려두고, 이미지가 실제로 로드된 뒤에만 공개한다.
       // → 캐시 여부와 무관하게 카드가 흰 네모로 먼저 뜨는 현상 방지.
       gachaResult.innerHTML = '';
-      gachaResult.appendChild(buildCard(r, { hideSource: true, onOpen: () => { closeGacha(); openModal(r); } }));
+      // eager: 결과 카드는 바로 보여야 하므로 지연 로딩 없이 즉시 로드(딜레이 방지, 이미지는 openGacha 때 프리로드됨)
+      gachaResult.appendChild(buildCard(r, { hideSource: true, eager: true, onOpen: () => { closeGacha(); openModal(r); } }));
       let revealed = false;
       const reveal = () => {
         if (revealed) return;
@@ -820,6 +836,26 @@
 
   renderTabs();
   renderGrid();
+
+  // 첫 화면 렌더 후, 브라우저가 한가할 때 나머지 카드 이미지를 "한 장씩 순차" 프리로드.
+  // 스크롤 시 lazy 로딩 딜레이가 안 보이게 미리 받아두되, 한 장씩이라 다른 요청을 막지 않음
+  // (카드가 늘어도 줄만 길어질 뿐 부하 없음. 수백 장 규모가 되면 앞쪽 N장 제한 고려).
+  function preloadCardImages() {
+    const srcs = RECIPES.filter((r) => r.img).map((r) => r.img);
+    let i = 0;
+    const next = () => {
+      if (i >= srcs.length) return;
+      const im = new Image();
+      im.onload = im.onerror = () => setTimeout(next, 60);
+      im.src = srcs[i++];
+    };
+    next();
+  }
+  if ('requestIdleCallback' in window) {
+    requestIdleCallback(preloadCardImages, { timeout: 3000 });
+  } else {
+    setTimeout(preloadCardImages, 1500); // iOS Safari 등 미지원 브라우저
+  }
 
   // iOS Safari에서 :active 스타일이 먹히려면 touchstart 리스너가 하나라도 있어야 함
   document.addEventListener('touchstart', () => {}, { passive: true });
