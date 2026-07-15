@@ -16,7 +16,7 @@
     // 3) 고기·건더기
     '매운소고기소스', '매운소고기소스(건더기만)', '청유훠궈소스(건더기만)', '오향우육/다진 고기', '튀긴대두',
     // 4) 채소·향신
-    '다진 마늘', '다진 파', '양파', '태국고추', '산고추/고추장아찌', '셀러리', '고수', '와사비',
+    '다진 마늘', '다진 파', '양파', '방울토마토', '태국고추', '산고추/고추장아찌', '셀러리', '고수', '와사비',
     // 5) 가루류
     '땅콩가루', '마라시즈닝/고춧가루', '참깨',
     // 6) 기름류
@@ -123,13 +123,32 @@
       ings: [['땅콩참깨소스', '1', '스푼'], ['스위트칠리소스', '1', '스푼'], ['다진 파', '1', '스푼'], ['다진 마늘', '1', '스푼'], ['고추기름', '0.5', '스푼'], ['매운소고기소스', '0.5', '스푼'], ['굴소스', '0.5', '스푼'], ['태국고추', '0.5', '스푼'], ['땅콩가루', '0.5', '스푼'], ['참깨', '0.5', '스푼']],
       steps: [],
       tip: '' },
-    { id: 'b3', cat: '육수', emoji: '🍲', img: 'assets/cards/스키야키탕.jpg?v=1', imgFit: 'cover', tint: 'linear-gradient(160deg,#F3E3CC,#E0C298)', name: '스키야키탕', desc: '맑은 탕에 소스바 재료를 넣어서 셀프로 만드는 스키야키탕이다.',
+    { id: 'b3', cat: '육수', emoji: '🍲', img: 'assets/cards/스키야키탕 육수.jpg?v=1', imgFit: 'cover', tint: 'linear-gradient(160deg,#F3E3CC,#E0C298)', name: '스키야키탕 육수', source: 'Gemini AI', desc: '맑은 탕에 소스바 재료를 넣어서 셀프로 만드는 스키야키탕 육수이다.',
       order: [['맑은 탕/물', '', '']],
       ings: [['굴소스', '3', '스푼'], ['간장소스', '1', '그릇'], ['오향우육/다진 고기', '2', '스푼'], ['다진 마늘', '0.5', '스푼'], ['다진 파', '0.5', '그릇'], ['설탕', '2', '스푼'], ['소금', '3', '스푼']],
       steps: [
         '국자를 이용해 맑은 탕의 물을 소스 그릇에 덜어둔다',
         '소스바에서 가져온 재료를 물이 끓으면 넣고 계속 끓여준다',
         '소스 그릇에 덜어둔 물로 취향에 맞게 간을 맞춘다',
+      ],
+      tip: '' },
+    { id: 'b4', cat: '육수', emoji: '🍲', img: 'assets/cards/토마토탕훠궈 육수.jpg?v=1', imgFit: 'cover', tint: 'linear-gradient(160deg,#FFE9E0,#FFC9B8)', name: '토마토탕훠궈 육수', source: 'Gemini AI', desc: '맑은 탕에 소스바 재료를 넣어서 셀프로 만드는 토마토탕훠궈 육수이다.',
+      order: [['맑은 탕/물', '', ''], ['우유/청유 마라훠궈', '1~2', '국자']],
+      ings: [['방울토마토', '2', '접시'], ['굴소스', '2', '그릇']],
+      steps: [
+        '직원분께 맑은 탕 물의 절반을 빼 달라고 요청한다',
+        '소스바에서 가져온 방울토마토를 맑은 탕에 넣어 물과 토마토의 비율이 1:1이 되도록 해준다',
+        '토마토가 익으면 가위로 자르고 국자 2개를 이용해 으깨준다',
+        '탕에 거품이 생기고 끓기 시작하면 소스바에서 가져온 굴소스를 넣어준다',
+        '마라훠궈 국물 1~2국자를 토마토탕에 넣고 섞어준다',
+      ],
+      tip: '굴소스는 취향에 맞게 조절해서 넣기' },
+    { id: 'b5', cat: '육수', emoji: '🍲', img: 'assets/cards/마라훠궈 육수.jpg?v=1', imgFit: 'cover', tint: 'linear-gradient(160deg,#F2DDD3,#D9A48F)', name: '마라훠궈 육수', source: 'Gemini AI', desc: '맑은 탕에 소스바 재료를 넣어서 셀프로 만드는 마라훠궈 육수이다.',
+      order: [['맑은 탕/물', '', '']],
+      ings: [['청유훠궈소스', '6', '스푼'], ['산초기름', '6', '스푼'], ['굴소스', '5', '스푼'], ['고추기름', '6', '스푼'], ['땅콩참깨소스', '5', '스푼'], ['다진 마늘', '5', '스푼'], ['간장소스', '4', '스푼'], ['참기름', '4', '스푼'], ['소금', '', '한 꼬집'], ['매운소고기소스', '2', '스푼']],
+      steps: [
+        '직원분께 맑은 탕 물의 절반을 빼 달라고 요청한다',
+        '소스바에서 가져온 재료를 물이 끓으면 넣고 계속 끓여준다',
       ],
       tip: '' },
     { id: 'r1', date: '2025-01-16', cat: '밥', emoji: '🍚', img: 'assets/cards/메기살덮밥.jpg?v=2', imgFit: 'cover', tint: 'linear-gradient(160deg,#FFF6DC,#FCE4AE)', name: '메기살덮밥', source: 'X @dduuuu__', desc: '홍탕에 익힌 메기살을 특제소스에 비빈 밥에 얹어 먹는 히든 메뉴이다.',
@@ -361,7 +380,7 @@
     }
     if (q) {
       filtered = filtered.filter((r) =>
-        r.name.includes(q) || r.ings.some((i) => i[0].includes(q))
+        r.name.includes(q) || (r.ings || []).some((i) => i[0].includes(q))
       );
     }
     // 정렬: 동점은 가나다순
@@ -547,7 +566,13 @@
       orderWrap.style.display = 'none';
     }
 
-    renderIngList(document.getElementById('modalIngs'), sortIngs(r.ings));
+    const ingsWrap = document.getElementById('modalIngsWrap');
+    if (r.ings && r.ings.length > 0) {
+      ingsWrap.style.display = '';
+      renderIngList(document.getElementById('modalIngs'), sortIngs(r.ings));
+    } else {
+      ingsWrap.style.display = 'none';
+    }
 
     const stepsWrap = document.getElementById('modalStepsWrap');
     const stepsEl = document.getElementById('modalSteps');
