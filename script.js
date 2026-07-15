@@ -215,6 +215,15 @@
         '국물에 넣어 익혀 먹는다',
       ],
       tip: '새우완자는 취향에 따라 날치알 새우완자로 바꾸거나 둘 다 넣기' },
+    { id: 'e3', cat: '기타', emoji: '🍢', img: 'assets/cards/유부 새우완자(업그레이드).jpg?v=1', imgFit: 'cover', tint: 'linear-gradient(160deg,#F5EFE4,#DCD2C0)', name: '유부 새우완자', ver: '업그레이드', source: 'YouTube 풍류천재 조서형', desc: '새우완자에 소스바 재료를 첨가하여 유부에 채워 넣고 국물에 익혀 먹는 히든 메뉴이다.',
+      order: [['새우완자', '1', '인분'], ['유부', '1', '인분']],
+      ings: [['참기름', '1', '스푼'], ['다진 마늘', '1', '스푼'], ['다진 파', '1', '스푼'], ['고수', '1', '스푼']],
+      steps: [
+        '새우완자에 소스바 재료를 올린다',
+        '직원분께 유부에 새우완자를 넣어달라고 요청한다',
+        '국물에 넣어 익혀 먹는다',
+      ],
+      tip: '' },
     { id: 'n2', cat: '면', emoji: '🍜', img: 'assets/cards/탄탄면.jpg?v=1', imgFit: 'cover', tint: 'linear-gradient(160deg,#F7E6CE,#E5C08C)', name: '탄탄면', source: 'Gemini AI', desc: '마라훠궈 국물에 익힌 생면을 특제소스에 비벼 먹는 히든 메뉴이다.',
       order: [['우유/청유 마라훠궈', '', ''], ['생면', '1', '인분']],
       ings: [['땅콩참깨소스', '1', '스푼'], ['버섯소스', '1', '스푼'], ['굴소스', '1', '스푼'], ['오향우육/다진 고기', '1', '스푼'], ['튀긴대두', '1', '스푼'], ['다진 파', '1', '스푼'], ['땅콩가루', '1', '스푼']],
@@ -600,7 +609,14 @@
     modalScroll.dataset.cat = r.cat; // 모바일 TCG 프레임·배지 색 스위치 (CSS 변수 세트)
     document.getElementById('modalCat').textContent = r.cat;
     document.getElementById('modalVer').textContent = r.ver || '';
-    document.getElementById('modalDesc').innerHTML = r.desc; // desc는 고유명사 <b> 강조 등 제한적 HTML 허용(작성자 데이터)
+    // desc는 고유명사 <b> 강조 등 제한적 HTML 허용(작성자 데이터). 없으면 빈 박스가 남으므로 숨김.
+    const descEl = document.getElementById('modalDesc');
+    if (r.desc) {
+      descEl.style.display = '';
+      descEl.innerHTML = r.desc;
+    } else {
+      descEl.style.display = 'none';
+    }
     modalFavBtn.classList.toggle('active', favorites.has(r.id));
     modalLikeBtn.classList.toggle('active', likedByMe.has(r.id));
     modalLikeCount.textContent = getLikeCount(r.id);
