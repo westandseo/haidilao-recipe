@@ -2069,6 +2069,10 @@ body {
 .tip-box,
 .step-text { word-break: keep-all; }
 
+/* 팁에 줄바꿈(\n)을 쓰면 여러 줄로 — 조건별 팁을 나열할 때 사용.
+   한 줄짜리 기존 팁은 \n이 없어 영향 없음. */
+.tip-box { white-space: pre-line; }
+
 /* 만드는 법도 다른 섹션과 같은 흰 박스로 — 본체 위 요소는 전부 박스 문법 통일.
    번호마다 재료 행과 같은 은은한 구분선 */
 .steps-list {
@@ -2112,5 +2116,14 @@ body {
 }
 
 .ing-row:last-child {
+  border-bottom: none;
+}
+
+/* 같은 재료의 이어지는 줄(이름 생략) — 앞줄과 한 덩어리로 보이게 구분선 제거 */
+.ing-row--same {
+  margin-top: -4px;
+}
+
+.ing-row:has(+ .ing-row--same) {
   border-bottom: none;
 }
